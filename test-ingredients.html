@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingredient Verification Test</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 20px;
+      background: #f9fafb;
+    }
+    .test-result {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 20px;
+      margin: 20px 0;
+    }
+    .pass { color: #10b981; }
+    .fail { color: #ef4444; }
+    button {
+      background: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover { background: #2563eb; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+    pre {
+      background: #f3f4f6;
+      padding: 12px;
+      border-radius: 4px;
+      overflow-x: auto;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Ingredient Library Verification</h1>
+  <p>This test verifies Task 14 requirements:</p>
+  <ul>
+    <li>Seeded ingredients are accessible</li>
+    <li>Auto-create ingredient functionality works</li>
+    <li>Ingredients persist correctly in database</li>
+  </ul>
+  
+  <button id="runTests" onclick="runTests()">Run Verification Tests</button>
+  <button id="clearData" onclick="clearData()">Clear & Reseed Database</button>
+  
+  <div id="results"></div>
+
+  <script type="module">
+    import { seedDatabase, isSeeded } from './src/utils/seedDatabase.js';
+    import { runAllVerifications } from './src/utils/verifyIngredients.js';
+    
+    window.runTests = async function() {
+      const button = document.getElementById('runTests');
+      const resultsDiv = document.getElementById('results');
+      
+      button.disabled = true;
+      button.textContent = 'Running tests...';
+      resultsDiv.innerHTML = '<p>Running verification tests...</p>';
+      
+      // Ensure database is seeded
+      if (!isSeeded()) {
+        seedDatabase();
+        resultsDiv.innerHTML += '<p>✅ Database seeded</p>';
+      }
+      
+      // Run verifications
+      const results = await runAllVerifications();
+      
+      // Display results
+      let html = '<div class="test-result">';
+      html += `<h2 class="${results.allPassed ? 'pass' : 'fail'}">`;
+      html += results.allPassed ? '✅ ALL TESTS PASSED' : '❌ SOME TESTS FAILED';
+      html += '</h2>';
+      
+      // Test 1
+      html += '<h3>Test 1: Seeded Ingredients</h3>';
+      html += `<p class="${results.tests.seededIngredients.success ? 'pass' : 'fail'}">`;
+      html += results.tests.seededIngredients.success ? '✅ PASS' : '❌ FAIL';
+      html += ` - Found ${results.tests.seededIngredients.count} ingredients</p>`;
+      if (results.tests.seededIngredients.ingredients.length > 0) {
+        html += '<p>Sample: ' + results.tests.seededIngredients.ingredients.map(i => i.name).join(', ') + '</p>';
+      }
+      
+      // Test 2
+      html += '<h3>Test 2: Auto-Create Ingredient</h3>';
+      html += `<p class="${results.tests.autoCreate.success ? 'pass' : 'fail'}">`;
+      html += results.tests.autoCreate.success ? '✅ PASS' : '❌ FAIL';
+      html += ` - ${results.tests.autoCreate.wasCreated ? 'Created new ingredient' : results.tests.autoCreate.message}</p>`;
+      
+      // Test 3
+      html += '<h3>Test 3: Persistence</h3>';
+      html += `<p class="${results.tests.persistence.success ? 'pass' : 'fail'}">`;
+      html += results.tests.persistence.success ? '✅ PASS' : '❌ FAIL';
+      html += '</p>';
+      html += '<pre>' + JSON.stringify(results.tests.persistence.details, null, 2) + '</pre>';
+      
+      html += '</div>';
+      
+      resultsDiv.innerHTML = html;
+      button.disabled = false;
+      button.textContent = 'Run Verification Tests';
+    };
+    
+    window.clearData = function() {
+      if (confirm('This will clear all data and reseed the database. Continue?')) {
+        localStorage.clear();
+        seedDatabase();
+        document.getElementById('results').innerHTML = '<p class="pass">✅ Database cleared and reseeded</p>';
+      }
+    };
+  </script>
+</body>
+</html>

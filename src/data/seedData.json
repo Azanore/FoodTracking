@@ -1,0 +1,1619 @@
+{
+  "ingredients": [
+    {
+      "id": "ing_egg",
+      "name": "Egg",
+      "category": "Protein",
+      "tags": [
+        "allergen"
+      ],
+      "aliases": [
+        "Eggs",
+        "Whole Egg"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_chicken",
+      "name": "Chicken",
+      "category": "Protein",
+      "tags": [],
+      "aliases": [
+        "Chicken Breast",
+        "Chicken Thigh"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_lamb",
+      "name": "Lamb",
+      "category": "Protein",
+      "tags": [],
+      "aliases": [
+        "Lamb Meat",
+        "Mutton"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_beef",
+      "name": "Beef",
+      "category": "Protein",
+      "tags": [],
+      "aliases": [
+        "Beef Meat"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_sardines",
+      "name": "Sardines",
+      "category": "Protein",
+      "tags": [],
+      "aliases": [
+        "Fresh Sardines"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_semolina",
+      "name": "Semolina",
+      "category": "Grain",
+      "tags": [],
+      "aliases": [
+        "Couscous Grain"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_wheat_flour",
+      "name": "Wheat Flour",
+      "category": "Grain",
+      "tags": [
+        "gluten"
+      ],
+      "aliases": [
+        "Flour",
+        "All-Purpose Flour"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_barley",
+      "name": "Barley",
+      "category": "Grain",
+      "tags": [],
+      "aliases": [
+        "Barley Grain"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_tomato",
+      "name": "Tomato",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Tomatoes",
+        "Fresh Tomato"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_onion",
+      "name": "Onion",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Onions",
+        "Yellow Onion"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_carrot",
+      "name": "Carrot",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Carrots"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_pumpkin",
+      "name": "Pumpkin",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Squash"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_zucchini",
+      "name": "Zucchini",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Courgette"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_eggplant",
+      "name": "Eggplant",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Aubergine"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_potato",
+      "name": "Potato",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Potatoes"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_bell_pepper",
+      "name": "Bell Pepper",
+      "category": "Vegetable",
+      "tags": [],
+      "aliases": [
+        "Sweet Pepper",
+        "Pepper"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_chickpeas",
+      "name": "Chickpeas",
+      "category": "Legume",
+      "tags": [],
+      "aliases": [
+        "Garbanzo Beans"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_lentils",
+      "name": "Lentils",
+      "category": "Legume",
+      "tags": [],
+      "aliases": [
+        "Red Lentils",
+        "Green Lentils"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_fava_beans",
+      "name": "Fava Beans",
+      "category": "Legume",
+      "tags": [],
+      "aliases": [
+        "Broad Beans"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_olive_oil",
+      "name": "Olive Oil",
+      "category": "Fat",
+      "tags": [
+        "healthy-fat"
+      ],
+      "aliases": [
+        "Extra Virgin Olive Oil"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_argan_oil",
+      "name": "Argan Oil",
+      "category": "Fat",
+      "tags": [
+        "healthy-fat"
+      ],
+      "aliases": [],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_butter",
+      "name": "Butter",
+      "category": "Fat",
+      "tags": [],
+      "aliases": [
+        "Smen"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_cumin",
+      "name": "Cumin",
+      "category": "Spice",
+      "tags": [],
+      "aliases": [
+        "Ground Cumin"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_paprika",
+      "name": "Paprika",
+      "category": "Spice",
+      "tags": [],
+      "aliases": [
+        "Sweet Paprika"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_saffron",
+      "name": "Saffron",
+      "category": "Spice",
+      "tags": [],
+      "aliases": [],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_ginger",
+      "name": "Ginger",
+      "category": "Spice",
+      "tags": [],
+      "aliases": [
+        "Fresh Ginger",
+        "Ground Ginger"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_cinnamon",
+      "name": "Cinnamon",
+      "category": "Spice",
+      "tags": [],
+      "aliases": [
+        "Ground Cinnamon"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_ras_el_hanout",
+      "name": "Ras el Hanout",
+      "category": "Spice",
+      "tags": [],
+      "aliases": [],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_harissa",
+      "name": "Harissa",
+      "category": "Spice",
+      "tags": [
+        "spicy"
+      ],
+      "aliases": [
+        "Harissa Paste"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_cilantro",
+      "name": "Cilantro",
+      "category": "Herb",
+      "tags": [],
+      "aliases": [
+        "Coriander",
+        "Fresh Cilantro"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_parsley",
+      "name": "Parsley",
+      "category": "Herb",
+      "tags": [],
+      "aliases": [
+        "Fresh Parsley"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_mint",
+      "name": "Mint",
+      "category": "Herb",
+      "tags": [],
+      "aliases": [
+        "Fresh Mint"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_milk",
+      "name": "Milk",
+      "category": "Dairy",
+      "tags": [],
+      "aliases": [
+        "Fresh Milk"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_lben",
+      "name": "Lben",
+      "category": "Dairy",
+      "tags": [],
+      "aliases": [
+        "Buttermilk"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "ing_jben",
+      "name": "Jben",
+      "category": "Dairy",
+      "tags": [],
+      "aliases": [
+        "Fresh Cheese"
+      ],
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    }
+  ],
+  "userFoods": [
+    {
+      "id": "food_tagine_chicken",
+      "name": "Chicken Tagine",
+      "defaultQuantity": 1,
+      "defaultUnit": "plate",
+      "defaultPortion": "full",
+      "defaultCookingMethod": "stewed",
+      "ingredients": [
+        {
+          "id": "ing_chicken",
+          "name": "Chicken",
+          "category": "Protein"
+        },
+        {
+          "id": "ing_onion",
+          "name": "Onion",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_carrot",
+          "name": "Carrot",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_potato",
+          "name": "Potato",
+          "category": "Vegetable"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_cumin",
+          "name": "Cumin",
+          "category": "Spice"
+        },
+        {
+          "id": "ing_saffron",
+          "name": "Saffron",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "traditional",
+        "lunch-staple"
+      ],
+      "lastUsed": "2025-10-19T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_couscous",
+      "name": "Couscous",
+      "defaultQuantity": 1,
+      "defaultUnit": "plate",
+      "defaultPortion": "full",
+      "defaultCookingMethod": "steamed",
+      "ingredients": [
+        {
+          "id": "ing_semolina",
+          "name": "Semolina",
+          "category": "Grain"
+        },
+        {
+          "id": "ing_carrot",
+          "name": "Carrot",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_zucchini",
+          "name": "Zucchini",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_pumpkin",
+          "name": "Pumpkin",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_chickpeas",
+          "name": "Chickpeas",
+          "category": "Legume"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_ras_el_hanout",
+          "name": "Ras el Hanout",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "traditional",
+        "lunch-staple"
+      ],
+      "lastUsed": "2025-10-18T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_harira",
+      "name": "Harira",
+      "defaultQuantity": 1,
+      "defaultUnit": "bowl",
+      "defaultPortion": "medium",
+      "defaultCookingMethod": "stewed",
+      "ingredients": [
+        {
+          "id": "ing_lentils",
+          "name": "Lentils",
+          "category": "Legume"
+        },
+        {
+          "id": "ing_chickpeas",
+          "name": "Chickpeas",
+          "category": "Legume"
+        },
+        {
+          "id": "ing_tomato",
+          "name": "Tomato",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_onion",
+          "name": "Onion",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_cilantro",
+          "name": "Cilantro",
+          "category": "Herb"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_cumin",
+          "name": "Cumin",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "soup",
+        "dinner-staple"
+      ],
+      "lastUsed": "2025-10-17T20:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_msemen",
+      "name": "Msemen",
+      "defaultQuantity": 2,
+      "defaultUnit": "pieces",
+      "defaultPortion": null,
+      "defaultCookingMethod": "fried",
+      "ingredients": [
+        {
+          "id": "ing_wheat_flour",
+          "name": "Wheat Flour",
+          "category": "Grain"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        }
+      ],
+      "tags": [
+        "breakfast-staple",
+        "homemade"
+      ],
+      "lastUsed": "2025-10-19T07:30:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_khobz",
+      "name": "Khobz",
+      "defaultQuantity": 2,
+      "defaultUnit": "slices",
+      "defaultPortion": null,
+      "defaultCookingMethod": "baked",
+      "ingredients": [
+        {
+          "id": "ing_wheat_flour",
+          "name": "Wheat Flour",
+          "category": "Grain"
+        }
+      ],
+      "defaultExtras": [],
+      "tags": [
+        "bread",
+        "staple"
+      ],
+      "lastUsed": "2025-10-19T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_zaalouk",
+      "name": "Zaalouk",
+      "defaultQuantity": 1,
+      "defaultUnit": "bowl",
+      "defaultPortion": "small",
+      "defaultCookingMethod": "sauteed",
+      "ingredients": [
+        {
+          "id": "ing_eggplant",
+          "name": "Eggplant",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_tomato",
+          "name": "Tomato",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_onion",
+          "name": "Onion",
+          "category": "Vegetable"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_cumin",
+          "name": "Cumin",
+          "category": "Spice"
+        },
+        {
+          "id": "ing_paprika",
+          "name": "Paprika",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "salad",
+        "side-dish"
+      ],
+      "lastUsed": "2025-10-16T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_taktouka",
+      "name": "Taktouka",
+      "defaultQuantity": 1,
+      "defaultUnit": "bowl",
+      "defaultPortion": "small",
+      "defaultCookingMethod": "sauteed",
+      "ingredients": [
+        {
+          "id": "ing_bell_pepper",
+          "name": "Bell Pepper",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_tomato",
+          "name": "Tomato",
+          "category": "Vegetable"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_cumin",
+          "name": "Cumin",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "salad",
+        "side-dish"
+      ],
+      "lastUsed": "2025-10-15T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_bissara",
+      "name": "Bissara",
+      "defaultQuantity": 1,
+      "defaultUnit": "bowl",
+      "defaultPortion": "medium",
+      "defaultCookingMethod": "boiled",
+      "ingredients": [
+        {
+          "id": "ing_fava_beans",
+          "name": "Fava Beans",
+          "category": "Legume"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_cumin",
+          "name": "Cumin",
+          "category": "Spice"
+        },
+        {
+          "id": "ing_paprika",
+          "name": "Paprika",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "soup",
+        "breakfast"
+      ],
+      "lastUsed": "2025-10-14T07:30:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_eggs_fried",
+      "name": "Fried Eggs",
+      "defaultQuantity": 2,
+      "defaultUnit": "pieces",
+      "defaultPortion": null,
+      "defaultCookingMethod": "fried",
+      "ingredients": [
+        {
+          "id": "ing_egg",
+          "name": "Egg",
+          "category": "Protein"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        }
+      ],
+      "tags": [
+        "protein-rich",
+        "breakfast-staple",
+        "quick"
+      ],
+      "lastUsed": "2025-10-19T07:30:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_eggs_boiled",
+      "name": "Boiled Eggs",
+      "defaultQuantity": 2,
+      "defaultUnit": "pieces",
+      "defaultPortion": null,
+      "defaultCookingMethod": "boiled",
+      "ingredients": [
+        {
+          "id": "ing_egg",
+          "name": "Egg",
+          "category": "Protein"
+        }
+      ],
+      "defaultExtras": [],
+      "tags": [
+        "protein-rich",
+        "quick"
+      ],
+      "lastUsed": "2025-10-18T20:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_sardines_grilled",
+      "name": "Grilled Sardines",
+      "defaultQuantity": 4,
+      "defaultUnit": "pieces",
+      "defaultPortion": null,
+      "defaultCookingMethod": "grilled",
+      "ingredients": [
+        {
+          "id": "ing_sardines",
+          "name": "Sardines",
+          "category": "Protein"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_cumin",
+          "name": "Cumin",
+          "category": "Spice"
+        },
+        {
+          "id": "ing_cilantro",
+          "name": "Cilantro",
+          "category": "Herb"
+        }
+      ],
+      "tags": [
+        "seafood",
+        "lunch"
+      ],
+      "lastUsed": "2025-10-13T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "food_tagine_lamb",
+      "name": "Lamb Tagine",
+      "defaultQuantity": 1,
+      "defaultUnit": "plate",
+      "defaultPortion": "full",
+      "defaultCookingMethod": "stewed",
+      "ingredients": [
+        {
+          "id": "ing_lamb",
+          "name": "Lamb",
+          "category": "Protein"
+        },
+        {
+          "id": "ing_onion",
+          "name": "Onion",
+          "category": "Vegetable"
+        },
+        {
+          "id": "ing_potato",
+          "name": "Potato",
+          "category": "Vegetable"
+        }
+      ],
+      "defaultExtras": [
+        {
+          "id": "ing_olive_oil",
+          "name": "Olive Oil",
+          "category": "Fat"
+        },
+        {
+          "id": "ing_ras_el_hanout",
+          "name": "Ras el Hanout",
+          "category": "Spice"
+        }
+      ],
+      "tags": [
+        "traditional",
+        "dinner-staple"
+      ],
+      "lastUsed": "2025-10-12T20:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    }
+  ],
+  "userDrinks": [
+    {
+      "id": "drink_mint_tea",
+      "name": "Mint Tea",
+      "category": "Tea",
+      "defaultQuantity": 1,
+      "defaultUnit": "cup",
+      "tags": [
+        "hot",
+        "traditional"
+      ],
+      "lastUsed": "2025-10-19T20:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "drink_orange_juice",
+      "name": "Orange Juice",
+      "category": "Juice",
+      "defaultQuantity": 1,
+      "defaultUnit": "glass",
+      "tags": [
+        "cold",
+        "fresh"
+      ],
+      "lastUsed": "2025-10-19T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "drink_almond_milk",
+      "name": "Almond Milk",
+      "category": "Other",
+      "defaultQuantity": 1,
+      "defaultUnit": "glass",
+      "tags": [
+        "cold",
+        "sweet"
+      ],
+      "lastUsed": "2025-10-18T11:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "drink_milk",
+      "name": "Milk",
+      "category": "Dairy",
+      "defaultQuantity": 1,
+      "defaultUnit": "glass",
+      "tags": [
+        "cold"
+      ],
+      "lastUsed": "2025-10-19T07:30:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "drink_lben",
+      "name": "Lben",
+      "category": "Dairy",
+      "defaultQuantity": 1,
+      "defaultUnit": "glass",
+      "tags": [
+        "cold",
+        "traditional"
+      ],
+      "lastUsed": "2025-10-17T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "drink_water",
+      "name": "Water",
+      "category": "Water",
+      "defaultQuantity": 1,
+      "defaultUnit": "glass",
+      "tags": [
+        "cold"
+      ],
+      "lastUsed": "2025-10-19T13:00:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    },
+    {
+      "id": "drink_coffee",
+      "name": "Coffee",
+      "category": "Coffee",
+      "defaultQuantity": 1,
+      "defaultUnit": "cup",
+      "tags": [
+        "hot"
+      ],
+      "lastUsed": "2025-10-16T07:30:00Z",
+      "usageCount": 0,
+      "createdAt": "2025-01-15T10:00:00Z"
+    }
+  ],
+  "dailyLogs": [
+    {
+      "id": "day_2025_10_19",
+      "date": "2025-10-19",
+      "tags": [
+        "weekend"
+      ],
+      "dayNotes": "Slept well, woke up at 7am.",
+      "meals": [
+        {
+          "id": "meal_breakfast_1",
+          "type": "Breakfast",
+          "time": "07:30",
+          "tags": [],
+          "foods": [
+            {
+              "foodId": "food_msemen",
+              "name": "Msemen",
+              "quantity": 2,
+              "unit": "pieces",
+              "portion": null,
+              "cookingMethod": "fried",
+              "ingredients": [
+                {
+                  "id": "ing_wheat_flour",
+                  "name": "Wheat Flour",
+                  "category": "Grain"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                }
+              ],
+              "tags": [
+                "homemade"
+              ],
+              "notes": null
+            },
+            {
+              "foodId": "food_eggs_fried",
+              "name": "Fried Eggs",
+              "quantity": 2,
+              "unit": "pieces",
+              "portion": null,
+              "cookingMethod": "fried",
+              "ingredients": [
+                {
+                  "id": "ing_egg",
+                  "name": "Egg",
+                  "category": "Protein"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                }
+              ],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_mint_tea",
+              "name": "Mint Tea",
+              "category": "Tea",
+              "quantity": 1,
+              "unit": "cup",
+              "tags": [
+                "hot"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": "Light breakfast"
+        },
+        {
+          "id": "meal_lunch_1",
+          "type": "Lunch",
+          "time": "13:00",
+          "tags": [],
+          "foods": [
+            {
+              "foodId": "food_tagine_chicken",
+              "name": "Chicken Tagine",
+              "quantity": 1,
+              "unit": "plate",
+              "portion": "full",
+              "cookingMethod": "stewed",
+              "ingredients": [
+                {
+                  "id": "ing_chicken",
+                  "name": "Chicken",
+                  "category": "Protein"
+                },
+                {
+                  "id": "ing_onion",
+                  "name": "Onion",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_carrot",
+                  "name": "Carrot",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_potato",
+                  "name": "Potato",
+                  "category": "Vegetable"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                },
+                {
+                  "id": "ing_cumin",
+                  "name": "Cumin",
+                  "category": "Spice"
+                },
+                {
+                  "id": "ing_saffron",
+                  "name": "Saffron",
+                  "category": "Spice"
+                }
+              ],
+              "tags": [],
+              "notes": null
+            },
+            {
+              "foodId": "food_khobz",
+              "name": "Khobz",
+              "quantity": 3,
+              "unit": "slices",
+              "portion": null,
+              "cookingMethod": "baked",
+              "ingredients": [
+                {
+                  "id": "ing_wheat_flour",
+                  "name": "Wheat Flour",
+                  "category": "Grain"
+                }
+              ],
+              "extras": [],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_orange_juice",
+              "name": "Orange Juice",
+              "category": "Juice",
+              "quantity": 1,
+              "unit": "glass",
+              "tags": [
+                "cold",
+                "fresh"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "meal_dinner_1",
+          "type": "Dinner",
+          "time": "20:00",
+          "tags": [],
+          "foods": [
+            {
+              "foodId": "food_harira",
+              "name": "Harira",
+              "quantity": 1,
+              "unit": "bowl",
+              "portion": "medium",
+              "cookingMethod": "stewed",
+              "ingredients": [
+                {
+                  "id": "ing_lentils",
+                  "name": "Lentils",
+                  "category": "Legume"
+                },
+                {
+                  "id": "ing_chickpeas",
+                  "name": "Chickpeas",
+                  "category": "Legume"
+                },
+                {
+                  "id": "ing_tomato",
+                  "name": "Tomato",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_onion",
+                  "name": "Onion",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_cilantro",
+                  "name": "Cilantro",
+                  "category": "Herb"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                },
+                {
+                  "id": "ing_cumin",
+                  "name": "Cumin",
+                  "category": "Spice"
+                }
+              ],
+              "tags": [],
+              "notes": null
+            },
+            {
+              "foodId": "food_eggs_boiled",
+              "name": "Boiled Eggs",
+              "quantity": 2,
+              "unit": "pieces",
+              "portion": null,
+              "cookingMethod": "boiled",
+              "ingredients": [
+                {
+                  "id": "ing_egg",
+                  "name": "Egg",
+                  "category": "Protein"
+                }
+              ],
+              "extras": [],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_mint_tea",
+              "name": "Mint Tea",
+              "category": "Tea",
+              "quantity": 1,
+              "unit": "cup",
+              "tags": [
+                "hot"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": "Light dinner"
+        }
+      ],
+      "notices": [
+        {
+          "text": "Felt energized after breakfast",
+          "time": "08:00",
+          "severity": 1,
+          "tags": [
+            "energy"
+          ]
+        },
+        {
+          "text": "Slight bloating after lunch",
+          "time": "14:30",
+          "severity": 2,
+          "tags": [
+            "digestion"
+          ]
+        }
+      ],
+      "createdAt": "2025-10-19T07:30:00Z",
+      "updatedAt": "2025-10-19T21:00:00Z"
+    },
+    {
+      "id": "day_2025_10_18",
+      "date": "2025-10-18",
+      "tags": [],
+      "dayNotes": null,
+      "meals": [
+        {
+          "id": "meal_breakfast_2",
+          "type": "Breakfast",
+          "time": "08:00",
+          "tags": [],
+          "foods": [
+            {
+              "foodId": "food_bissara",
+              "name": "Bissara",
+              "quantity": 1,
+              "unit": "bowl",
+              "portion": "medium",
+              "cookingMethod": "boiled",
+              "ingredients": [
+                {
+                  "id": "ing_fava_beans",
+                  "name": "Fava Beans",
+                  "category": "Legume"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                },
+                {
+                  "id": "ing_cumin",
+                  "name": "Cumin",
+                  "category": "Spice"
+                },
+                {
+                  "id": "ing_paprika",
+                  "name": "Paprika",
+                  "category": "Spice"
+                }
+              ],
+              "tags": [],
+              "notes": null
+            },
+            {
+              "foodId": "food_khobz",
+              "name": "Khobz",
+              "quantity": 2,
+              "unit": "slices",
+              "portion": null,
+              "cookingMethod": "baked",
+              "ingredients": [
+                {
+                  "id": "ing_wheat_flour",
+                  "name": "Wheat Flour",
+                  "category": "Grain"
+                }
+              ],
+              "extras": [],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_coffee",
+              "name": "Coffee",
+              "category": "Coffee",
+              "quantity": 1,
+              "unit": "cup",
+              "tags": [
+                "hot"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "meal_snack_2",
+          "type": "Snack",
+          "time": "11:00",
+          "tags": [],
+          "foods": [
+            {
+              "foodId": null,
+              "name": "Dates",
+              "quantity": 5,
+              "unit": "pieces",
+              "portion": null,
+              "cookingMethod": "raw",
+              "ingredients": [],
+              "extras": [],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_almond_milk",
+              "name": "Almond Milk",
+              "category": "Other",
+              "quantity": 1,
+              "unit": "glass",
+              "tags": [
+                "cold",
+                "sweet"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": null
+        },
+        {
+          "id": "meal_lunch_2",
+          "type": "Lunch",
+          "time": "13:30",
+          "tags": [
+            "ate-out"
+          ],
+          "foods": [
+            {
+              "foodId": "food_couscous",
+              "name": "Couscous",
+              "quantity": 1,
+              "unit": "plate",
+              "portion": "full",
+              "cookingMethod": "steamed",
+              "ingredients": [
+                {
+                  "id": "ing_semolina",
+                  "name": "Semolina",
+                  "category": "Grain"
+                },
+                {
+                  "id": "ing_carrot",
+                  "name": "Carrot",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_zucchini",
+                  "name": "Zucchini",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_pumpkin",
+                  "name": "Pumpkin",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_chickpeas",
+                  "name": "Chickpeas",
+                  "category": "Legume"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                },
+                {
+                  "id": "ing_ras_el_hanout",
+                  "name": "Ras el Hanout",
+                  "category": "Spice"
+                }
+              ],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_water",
+              "name": "Water",
+              "category": "Water",
+              "quantity": 2,
+              "unit": "glass",
+              "tags": [
+                "cold"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": "Ate a lot"
+        },
+        {
+          "id": "meal_dinner_2",
+          "type": "Dinner",
+          "time": "20:30",
+          "tags": [],
+          "foods": [
+            {
+              "foodId": "food_zaalouk",
+              "name": "Zaalouk",
+              "quantity": 1,
+              "unit": "bowl",
+              "portion": "small",
+              "cookingMethod": "sauteed",
+              "ingredients": [
+                {
+                  "id": "ing_eggplant",
+                  "name": "Eggplant",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_tomato",
+                  "name": "Tomato",
+                  "category": "Vegetable"
+                },
+                {
+                  "id": "ing_onion",
+                  "name": "Onion",
+                  "category": "Vegetable"
+                }
+              ],
+              "extras": [
+                {
+                  "id": "ing_olive_oil",
+                  "name": "Olive Oil",
+                  "category": "Fat"
+                },
+                {
+                  "id": "ing_cumin",
+                  "name": "Cumin",
+                  "category": "Spice"
+                },
+                {
+                  "id": "ing_paprika",
+                  "name": "Paprika",
+                  "category": "Spice"
+                }
+              ],
+              "tags": [],
+              "notes": null
+            },
+            {
+              "foodId": "food_khobz",
+              "name": "Khobz",
+              "quantity": 2,
+              "unit": "slices",
+              "portion": null,
+              "cookingMethod": "baked",
+              "ingredients": [
+                {
+                  "id": "ing_wheat_flour",
+                  "name": "Wheat Flour",
+                  "category": "Grain"
+                }
+              ],
+              "extras": [],
+              "tags": [],
+              "notes": null
+            }
+          ],
+          "drinks": [
+            {
+              "drinkId": "drink_lben",
+              "name": "Lben",
+              "category": "Dairy",
+              "quantity": 1,
+              "unit": "glass",
+              "tags": [
+                "cold"
+              ],
+              "notes": null
+            }
+          ],
+          "notes": null
+        }
+      ],
+      "notices": [],
+      "createdAt": "2025-10-18T08:00:00Z",
+      "updatedAt": "2025-10-18T20:30:00Z"
+    }
+  ],
+  "userPreferences": {
+    "userId": "user_default",
+    "defaultMealTimes": {
+      "Breakfast": "07:30",
+      "Lunch": "13:00",
+      "Dinner": "20:00",
+      "Snack": null
+    },
+    "favoritesByMeal": {
+      "Breakfast": [
+        "food_msemen",
+        "food_eggs_fried",
+        "food_bissara",
+        "drink_mint_tea",
+        "drink_milk"
+      ],
+      "Lunch": [
+        "food_tagine_chicken",
+        "food_couscous",
+        "food_khobz",
+        "drink_orange_juice"
+      ],
+      "Dinner": [
+        "food_harira",
+        "food_tagine_lamb",
+        "drink_mint_tea"
+      ],
+      "Snack": [
+        "drink_almond_milk"
+      ]
+    },
+    "recentFoods": [
+      "food_tagine_chicken",
+      "food_msemen",
+      "food_eggs_fried",
+      "food_harira",
+      "food_couscous"
+    ],
+    "recentDrinks": [
+      "drink_mint_tea",
+      "drink_orange_juice",
+      "drink_water",
+      "drink_milk"
+    ],
+    "customTags": {
+      "day": [
+        "weekend",
+        "traveled",
+        "sick",
+        "busy"
+      ],
+      "meal": [
+        "ate-out",
+        "rushed",
+        "social",
+        "leftover"
+      ],
+      "food": [
+        "homemade",
+        "spicy",
+        "cold",
+        "leftover"
+      ],
+      "drink": [
+        "hot",
+        "cold",
+        "sweet"
+      ],
+      "notice": [
+        "digestion",
+        "energy",
+        "mood",
+        "sleep",
+        "pain",
+        "headache"
+      ]
+    },
+    "createdAt": "2025-01-15T10:00:00Z",
+    "updatedAt": "2025-10-19T21:00:00Z"
+  }
+}
