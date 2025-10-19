@@ -44,10 +44,10 @@ export const WizardFooter = memo(function WizardFooter({
   isSaving = false,
 }) {
   return (
-    <div 
+    <div
       className="flex items-center justify-between"
       style={{
-        padding: `${16}px ${24}px`,
+        padding: `${12}px ${20}px`,
         borderTop: `${1}px solid var(--color-border-primary)`,
         backgroundColor: 'var(--color-bg-secondary)',
       }}
@@ -57,10 +57,10 @@ export const WizardFooter = memo(function WizardFooter({
         onClick={onCancel}
         disabled={isLoading || isSaving}
         aria-label="Cancel wizard"
-        className="rounded-md transition-all disabled:cursor-not-allowed"
+        className="rounded-md transition-all disabled:cursor-not-allowed cursor-pointer"
         style={{
-          padding: `${10}px ${16}px`,
-          fontSize: 'var(--font-size-sm)',
+          padding: `${8}px ${14}px`,
+          fontSize: 'var(--font-size-xs)',
           fontWeight: 'var(--font-weight-medium)',
           color: 'var(--color-text-secondary)',
           backgroundColor: 'transparent',
@@ -83,17 +83,17 @@ export const WizardFooter = memo(function WizardFooter({
       </button>
 
       {/* Navigation buttons */}
-      <div className="flex items-center" style={{ gap: '12px' }}>
+      <div className="flex items-center" style={{ gap: '8px' }}>
         {/* Back button */}
         {!isFirstStep && (
           <button
             onClick={onBack}
             disabled={isLoading || isSaving}
             aria-label="Go to previous step"
-            className="rounded-lg transition-all disabled:cursor-not-allowed"
+            className="rounded-lg transition-all disabled:cursor-not-allowed cursor-pointer"
             style={{
-              padding: `${10}px ${20}px`,
-              fontSize: 'var(--font-size-sm)',
+              padding: `${8}px ${16}px`,
+              fontSize: 'var(--font-size-xs)',
               fontWeight: 'var(--font-weight-medium)',
               color: 'var(--color-text-primary)',
               backgroundColor: 'var(--color-bg-primary)',
@@ -124,10 +124,10 @@ export const WizardFooter = memo(function WizardFooter({
             disabled={isLoading || isSaving}
             aria-label="Save changes"
             aria-disabled={isLoading || isSaving}
-            className="rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center"
+            className="rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
             style={{
-              padding: `${10}px ${24}px`,
-              fontSize: 'var(--font-size-sm)',
+              padding: `${8}px ${18}px`,
+              fontSize: 'var(--font-size-xs)',
               fontWeight: 'var(--font-weight-semibold)',
               color: 'var(--color-white)',
               backgroundColor: isSaving ? 'var(--color-success)' : 'var(--color-success)',
@@ -174,10 +174,10 @@ export const WizardFooter = memo(function WizardFooter({
           disabled={isNextDisabled || isLoading || isSaving}
           aria-label={isLastStep ? 'Save and complete wizard' : 'Go to next step'}
           aria-disabled={isNextDisabled || isLoading || isSaving}
-          className="rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center"
+          className="rounded-lg transition-all disabled:cursor-not-allowed flex items-center justify-center cursor-pointer"
           style={{
-            padding: `${10}px ${24}px`,
-            fontSize: 'var(--font-size-sm)',
+            padding: `${8}px ${18}px`,
+            fontSize: 'var(--font-size-xs)',
             fontWeight: 'var(--font-weight-semibold)',
             color: 'var(--color-white)',
             backgroundColor: (isNextDisabled || isSaving) ? 'var(--color-disabled-bg)' : 'var(--color-accent)',

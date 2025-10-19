@@ -76,13 +76,13 @@ export function Wizard({
 }) {
   // Analytics tracking
   const sessionIdRef = useRef(null);
-  
+
   // Start analytics session on mount
   useEffect(() => {
     const wizardType = title || 'Unknown';
     sessionIdRef.current = startWizardSession(wizardType);
   }, [title]);
-  
+
   // Wrap handlers with analytics tracking
   const handleCompleteWithAnalytics = useCallback((data) => {
     if (sessionIdRef.current) {
@@ -90,27 +90,27 @@ export function Wizard({
     }
     return onComplete(data);
   }, [onComplete]);
-  
+
   const handleCancelWithAnalytics = useCallback(() => {
     if (sessionIdRef.current) {
       trackWizardCancellation(sessionIdRef.current, currentStepIndexRef.current, isDirtyRef.current);
     }
     onCancel();
   }, [onCancel]);
-  
+
   // Detect edit mode: if initialData has meaningful content, we're editing
   const isEditMode = useMemo(() => {
-    return Object.keys(initialData).length > 0 && 
-           Object.values(initialData).some(val => 
-             val !== null && val !== undefined && val !== '' && 
-             (Array.isArray(val) ? val.length > 0 : true)
-           );
+    return Object.keys(initialData).length > 0 &&
+      Object.values(initialData).some(val =>
+        val !== null && val !== undefined && val !== '' &&
+        (Array.isArray(val) ? val.length > 0 : true)
+      );
   }, [initialData]);
 
   // Wrap partial save handler with analytics and close logic
   const handlePartialSaveWithAnalytics = useCallback(async (modifiedData, fullData) => {
     if (!onPartialSave) return false;
-    
+
     try {
       await onPartialSave(modifiedData, fullData);
       if (sessionIdRef.current) {
@@ -154,11 +154,11 @@ export function Wizard({
     cancel,
     savePartial,
   } = wizard;
-  
+
   // Track current state in refs for analytics
   const currentStepIndexRef = useRef(currentStepIndex);
   const isDirtyRef = useRef(isDirty);
-  
+
   useEffect(() => {
     currentStepIndexRef.current = currentStepIndex;
     isDirtyRef.current = isDirty;
@@ -169,10 +169,10 @@ export function Wizard({
   const [isTransitioning, setIsTransitioning] = useState(false);
   const prevStepIndex = useRef(currentStepIndex);
   const contentRef = useRef(null);
-  
+
   // Screen reader announcements
   const [announcement, setAnnouncement] = useState('');
-  
+
   // Focus management
   const triggerElementRef = useRef(null);
   const modalRef = useRef(null);
@@ -202,7 +202,7 @@ export function Wizard({
       const timer = setTimeout(() => {
         setIsTransitioning(false);
         setSlideDirection('none');
-        
+
         // Focus first input in the new step
         if (contentRef.current) {
           const firstInput = contentRef.current.querySelector(
@@ -256,11 +256,11 @@ export function Wizard({
         if (target.tagName === 'TEXTAREA') {
           return;
         }
-        
+
         // Prevent form submission on Enter in inputs
         if (target.tagName === 'INPUT' || target.tagName === 'BUTTON') {
           e.preventDefault();
-          
+
           // Only proceed if not on a button (let buttons handle their own clicks)
           if (target.tagName !== 'BUTTON') {
             goNext();
@@ -361,7 +361,7 @@ export function Wizard({
         {/* Close button */}
         <button
           onClick={cancel}
-          className="absolute top-5 right-5 z-10 rounded-full p-1 transition-colors"
+          className="absolute top-3 right-3 z-10 rounded-[var(--radius-sm)] p-1 transition-colors cursor-pointer"
           style={{
             color: 'var(--color-text-tertiary)',
             transition: `all var(--transition-fast) var(--ease-in-out)`
@@ -376,20 +376,20 @@ export function Wizard({
           }}
           aria-label="Close wizard"
         >
-          <X size={20} />
+          <X size={16} />
         </button>
 
         {/* Title */}
         {title && (
-          <div 
-            className="px-6 pt-6 pb-4 pr-8"
+          <div
+            className="px-5 pt-4 pb-3 pr-12"
             style={{ borderBottom: `${`var(--border-width-thin)`} solid var(--color-border-primary)` }}
           >
-            <h2 
-              id="wizard-title" 
+            <h2
+              id="wizard-title"
               style={{
-                fontSize: 'var(--font-size-3xl)',
-                fontWeight: 'var(--font-weight-bold)',
+                fontSize: 'var(--font-size-lg)',
+                fontWeight: 'var(--font-weight-semibold)',
                 color: 'var(--color-text-primary)'
               }}
             >
@@ -416,7 +416,7 @@ export function Wizard({
         {/* Content area (scrollable with custom scrollbar) */}
         <div
           ref={contentRef}
-          className="flex-1 overflow-y-auto px-6 py-6 transition-all duration-200 ease-in-out"
+          className="flex-1 overflow-y-auto px-5 py-4 transition-all duration-200 ease-in-out"
         >
           <div className={`transition-all duration-200 ease-in-out ${getSlideClass()}`}>
             {/* Step-level error summary */}
@@ -424,14 +424,14 @@ export function Wizard({
               <div
                 role="alert"
                 aria-live="assertive"
-                className="mb-6 p-4 animate-fade-in"
+                className="mb-4 p-3 animate-fade-in"
                 style={{
                   backgroundColor: 'var(--color-danger-bg)',
-                  border: `${`var(--border-width-medium)`} solid var(--color-danger)`,
-                  borderRadius: 'var(--radius-lg)'
+                  border: `${`var(--border-width-thin)`} solid var(--color-danger)`,
+                  borderRadius: 'var(--radius-md)'
                 }}
               >
-                <p 
+                <p
                   className="flex items-center gap-2"
                   style={{
                     fontSize: 'var(--font-size-sm)',
@@ -443,7 +443,7 @@ export function Wizard({
                   {errors._general || 'Please fix the following errors:'}
                 </p>
                 {!errors._general && Object.keys(errors).length > 1 && (
-                  <ul 
+                  <ul
                     className="list-disc list-inside mt-2 space-y-1"
                     style={{
                       fontSize: 'var(--font-size-sm)',

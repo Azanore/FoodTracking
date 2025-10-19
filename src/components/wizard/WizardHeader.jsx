@@ -31,15 +31,15 @@ import { Check } from 'lucide-react';
  */
 export const WizardHeader = memo(function WizardHeader({ currentStep, totalSteps, steps, onStepClick }) {
   return (
-    <div 
-      className="px-6 py-5"
+    <div
+      className="px-5 py-3"
       style={{
         borderBottom: `var(--border-width-thin) solid var(--color-border-primary)`,
         backgroundColor: 'var(--color-bg-secondary)'
       }}
     >
       {/* Step indicator */}
-      <div className="flex items-center justify-between mb-5">
+      <div className="flex items-center justify-between mb-3">
         {steps.map((step, index) => {
           const isCompleted = step.completed;
           const isCurrent = index === currentStep;
@@ -55,16 +55,16 @@ export const WizardHeader = memo(function WizardHeader({ currentStep, totalSteps
                 disabled={!isClickable}
                 className="relative flex items-center justify-center rounded-full font-semibold text-sm"
                 style={{
-                  width: isCurrent ? '44px' : '40px',
-                  height: isCurrent ? '44px' : '40px',
-                  backgroundColor: isCurrent 
-                    ? 'var(--color-accent)' 
-                    : isCompleted 
-                      ? 'var(--color-success)' 
+                  width: isCurrent ? '36px' : '32px',
+                  height: isCurrent ? '36px' : '32px',
+                  backgroundColor: isCurrent
+                    ? 'var(--color-accent)'
+                    : isCompleted
+                      ? 'var(--color-success)'
                       : 'var(--color-bg-primary)',
                   color: isCurrent || isCompleted ? 'white' : 'var(--color-text-tertiary)',
-                  border: isUpcoming 
-                    ? `var(--border-width-medium) ${step.optional ? 'dashed' : 'solid'} var(--color-border-secondary)` 
+                  border: isUpcoming
+                    ? `var(--border-width-medium) ${step.optional ? 'dashed' : 'solid'} var(--color-border-secondary)`
                     : 'none',
                   boxShadow: isCurrent ? `0 0 0 4px var(--color-accent)20` : 'none',
                   cursor: isClickable ? 'pointer' : 'default',
@@ -97,8 +97,8 @@ export const WizardHeader = memo(function WizardHeader({ currentStep, totalSteps
 
               {/* Connecting line */}
               {!isLast && (
-                <div 
-                  className="flex-1 mx-3 rounded-full overflow-hidden"
+                <div
+                  className="flex-1 mx-2 rounded-full overflow-hidden"
                   style={{
                     height: '2px',
                     backgroundColor: 'var(--color-border-primary)'
@@ -121,21 +121,21 @@ export const WizardHeader = memo(function WizardHeader({ currentStep, totalSteps
 
       {/* Current step title */}
       <div className="text-center">
-        <h3 
-          id="wizard-step-title" 
+        <h3
+          id="wizard-step-title"
           className="font-semibold"
           style={{
-            fontSize: 'var(--font-size-xl)',
+            fontSize: 'var(--font-size-base)',
             color: 'var(--color-text-primary)'
           }}
         >
           {steps[currentStep].title}
         </h3>
         {steps[currentStep].optional && (
-          <p 
-            className="mt-1 font-medium"
+          <p
+            className="mt-0.5 font-medium"
             style={{
-              fontSize: 'var(--font-size-xs)',
+              fontSize: '10px',
               color: 'var(--color-text-secondary)'
             }}
           >

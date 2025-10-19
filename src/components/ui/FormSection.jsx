@@ -12,21 +12,21 @@
  */
 export function FormSection({ title, description, children, className = '' }) {
   return (
-    <div className={`mb-[var(--spacing-section-gap)] ${className}`}>
-      <div className="mb-[var(--spacing-lg)]">
-        <h3 
-          className="text-[var(--font-size-sm)] font-[var(--font-weight-semibold)] text-[var(--color-text-secondary)] uppercase tracking-[var(--letter-spacing-wider)] mb-[var(--spacing-sm)]"
+    <div className={`mb-[var(--spacing-lg)] ${className}`}>
+      <div className="mb-[var(--spacing-md)]">
+        <h3
+          className="text-[var(--font-size-xs)] font-[var(--font-weight-semibold)] text-[var(--color-text-secondary)] uppercase tracking-[var(--letter-spacing-wider)] mb-[var(--spacing-xs)]"
         >
           {title}
         </h3>
         <div className="border-b border-[var(--color-border-primary)]" />
         {description && (
-          <p className="text-[var(--font-size-sm)] text-[var(--color-text-secondary)] mt-[var(--spacing-sm)]">
+          <p className="text-[var(--font-size-xs)] text-[var(--color-text-secondary)] mt-[var(--spacing-xs)]">
             {description}
           </p>
         )}
       </div>
-      <div className="space-y-[var(--spacing-form-field-gap)]">
+      <div className="space-y-[var(--spacing-md)]">
         {children}
       </div>
     </div>

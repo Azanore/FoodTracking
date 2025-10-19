@@ -22,7 +22,7 @@ const getCurrentTime = () => {
 // Auto-suggest meal type based on current time
 const suggestMealType = (time) => {
   const [hours] = time.split(':').map(Number);
-  
+
   if (hours >= 5 && hours < 11) return 'Breakfast';
   if (hours >= 11 && hours < 16) return 'Lunch';
   if (hours >= 16 && hours < 22) return 'Dinner';
@@ -38,12 +38,12 @@ const suggestMealType = (time) => {
  */
 export function MealForm({ meal, onSave, onCancel }) {
   const isEditing = !!meal;
-  
+
   const [mealType, setMealType] = useState(meal?.type || '');
   const [time, setTime] = useState(meal?.time || getCurrentTime());
   const [selectedTagIds, setSelectedTagIds] = useState(meal?.tags || []);
   const [notes, setNotes] = useState(meal?.notes || '');
-  
+
   const [availableTags, setAvailableTags] = useState([]);
 
   // Load tags and auto-suggest meal type
@@ -53,7 +53,7 @@ export function MealForm({ meal, onSave, onCancel }) {
       setAvailableTags(tags);
     };
     loadData();
-    
+
     if (!isEditing && !mealType) {
       setMealType(suggestMealType(time));
     }
@@ -77,7 +77,7 @@ export function MealForm({ meal, onSave, onCancel }) {
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     if (!mealType || !time) {
       alert('Please select meal type and time');
       return;
@@ -102,7 +102,7 @@ export function MealForm({ meal, onSave, onCancel }) {
       onClose={onCancel}
       title="Edit Meal"
       footer={
-        <div className="flex gap-3 justify-end">
+        <div className="flex gap-2 justify-end">
           <Button variant="secondary" onClick={onCancel}>
             Cancel
           </Button>
@@ -123,7 +123,7 @@ export function MealForm({ meal, onSave, onCancel }) {
             columns={2}
             required
           />
-          
+
           <Input
             label="Time"
             type="time"

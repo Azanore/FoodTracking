@@ -60,17 +60,17 @@ export function Modal({
       >
         {/* Header with title and close button */}
         {title && (
-          <div className="flex-shrink-0 border-b border-[var(--color-border-primary)] px-6 py-4 flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-[var(--color-text-primary)]">
+          <div className="flex-shrink-0 border-b border-[var(--color-border-primary)] px-5 py-3 flex items-center justify-between">
+            <h2 className="text-base font-semibold text-[var(--color-text-primary)]">
               {title}
             </h2>
             <button
               onClick={onClose}
-              className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+              className="text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer p-1 rounded-[var(--radius-sm)] hover:bg-[var(--color-hover-bg)]"
               aria-label="Close modal"
             >
               <svg
-                className="w-5 h-5"
+                className="w-4 h-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -90,11 +90,11 @@ export function Modal({
         {!title && (
           <button
             onClick={onClose}
-            className="absolute top-4 right-4 z-10 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer"
+            className="absolute top-3 right-3 z-10 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors cursor-pointer p-1 rounded-[var(--radius-sm)] hover:bg-[var(--color-hover-bg)]"
             aria-label="Close modal"
           >
             <svg
-              className="w-5 h-5"
+              className="w-4 h-4"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -110,13 +110,13 @@ export function Modal({
         )}
 
         {/* Scrollable content area */}
-        <div className="flex-1 overflow-y-auto p-6">
+        <div className="flex-1 overflow-y-auto px-5 py-4">
           {children}
         </div>
 
         {/* Footer with action buttons */}
         {footer && (
-          <div className="flex-shrink-0 border-t border-[var(--color-border-primary)] p-6">
+          <div className="flex-shrink-0 border-t border-[var(--color-border-primary)] px-5 py-3">
             {footer}
           </div>
         )}

@@ -42,7 +42,7 @@ export function DrinkForm({ drink, onClose, onSave }) {
   const [defaultQuantity, setDefaultQuantity] = useState(1);
   const [defaultUnit, setDefaultUnit] = useState('glass');
   const [selectedTagIds, setSelectedTagIds] = useState([]);
-  
+
   const [availableTags, setAvailableTags] = useState([]);
   const [error, setError] = useState(null);
   const [saving, setSaving] = useState(false);
@@ -52,7 +52,7 @@ export function DrinkForm({ drink, onClose, onSave }) {
     const loadData = async () => {
       const tags = await getAllDrinkTags();
       setAvailableTags(tags);
-      
+
       if (drink) {
         setName(drink.name);
         setCategory(drink.category);
@@ -68,12 +68,12 @@ export function DrinkForm({ drink, onClose, onSave }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
-    
+
     if (!name.trim()) {
       setError('Drink name is required');
       return;
     }
-    
+
     setSaving(true);
     try {
       const drinkData = {
@@ -84,7 +84,7 @@ export function DrinkForm({ drink, onClose, onSave }) {
         defaultUnit,
         tags: selectedTagIds
       };
-      
+
       await saveDrink(drinkData);
       onSave();
     } catch (err) {
@@ -107,7 +107,7 @@ export function DrinkForm({ drink, onClose, onSave }) {
       onClose={onClose}
       title={drink ? 'Edit Drink' : 'Add Drink'}
       footer={
-        <div className="flex justify-end gap-[var(--spacing-md)]">
+        <div className="flex justify-end gap-2">
           <Button
             variant="secondary"
             onClick={onClose}
