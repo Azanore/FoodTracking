@@ -2,7 +2,7 @@
 // Related: App.jsx uses this for navigation
 // Should not include: View content, complex state management
 
-import { Calendar, UtensilsCrossed, FlaskConical } from 'lucide-react';
+import { Calendar, UtensilsCrossed } from 'lucide-react';
 
 export function Sidebar({ activeView, onNavigate }) {
   return (
@@ -29,18 +29,6 @@ export function Sidebar({ activeView, onNavigate }) {
         title="Foods"
       >
         <UtensilsCrossed size={20} />
-      </button>
-      
-      <button
-        onClick={() => onNavigate('verify')}
-        className={`w-10 h-10 flex items-center justify-center rounded-lg transition-all duration-[var(--transition-fast)] ease-[var(--ease-in-out)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] focus:ring-offset-2 cursor-pointer ${
-          activeView === 'verify'
-            ? 'bg-[var(--color-accent)] text-white hover:bg-[var(--color-accent-hover)] active:bg-[var(--color-accent-active)]'
-            : 'text-[var(--color-text-secondary)] hover:bg-[var(--color-hover-bg)] hover:text-[var(--color-text-primary)] active:bg-[var(--color-active-bg)]'
-        }`}
-        title="Verify Ingredients"
-      >
-        <FlaskConical size={20} />
       </button>
     </aside>
   );

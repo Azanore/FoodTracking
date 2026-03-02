@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Sidebar } from './components/Sidebar';
 import { TodayView } from './views/TodayView';
 import { FoodsView } from './views/FoodsView';
-import { VerifyIngredientsView } from './views/VerifyIngredientsView';
+
 import { WizardAnalyticsDashboard } from './components/WizardAnalyticsDashboard';
 
 function App() {
@@ -19,7 +19,7 @@ function App() {
       <main className="flex-1 overflow-auto">
         {activeView === 'today' && <TodayView />}
         {activeView === 'foods' && <FoodsView />}
-        {activeView === 'verify' && <VerifyIngredientsView />}
+
       </main>
       
       {/* Wizard analytics dashboard (dev tool) */}
