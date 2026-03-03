@@ -6,19 +6,21 @@ import { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, X } from 'lucide-react';
 import { getAllFoods, getAllDrinks, incrementFoodUsage, incrementDrinkUsage } from '../services/db';
 
-const UNITS = ['pieces', 'slices', 'plate', 'bowl', 'cup', 'glass', 'ml', 'g', 'oz', 'serving', 'spoon', 'tablespoon', 'teaspoon'];
+const FOOD_UNITS  = ['pieces', 'slices', 'plate', 'bowl', 'cup', 'g', 'oz', 'serving', 'spoon', 'tablespoon', 'teaspoon'];
+const DRINK_UNITS = ['ml', 'L', 'glass', 'cup', 'oz', 'can', 'bottle', 'serving', 'tablespoon', 'teaspoon'];
 const COOKING_METHODS = ['raw', 'fried', 'baked', 'boiled', 'steamed', 'grilled', 'roasted', 'stewed', 'sautéed', 'blanched'];
 
 /**
  * LogItemModal – 2-phase modal: search → quantity/unit/cooking.
  * Always saves to the meal that opened it (no meal-switching inside modal).
  *
- * @param {boolean}  isOpen       – controls visibility
- * @param {Function} onClose      – close callback
- * @param {Function} onSave       – called with the pointer entry object
- * @param {string}   mealLabel    – display label shown in the header (e.g. "Lunch · 13:00")
+ * @param {boolean}     isOpen          – controls visibility
+ * @param {Function}    onClose         – close callback
+ * @param {Function}    onSave          – called with the pointer entry object
+ * @param {string}      mealLabel       – display label shown in the header
+ * @param {Object|null} preSelectedItem – if set, skip search and jump to quantity phase
  */
-export function LogItemModal({ isOpen, onClose, onSave, mealLabel }) {
+export function LogItemModal({ isOpen, onClose, onSave, mealLabel, preSelectedItem = null }) {
   const [items, setItems]               = useState([]);
   const [searchQuery, setSearchQuery]   = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
@@ -37,10 +39,19 @@ export function LogItemModal({ isOpen, onClose, onSave, mealLabel }) {
     };
     load();
     setSearchQuery('');
-    setSelectedItem(null);
-    setQuantity(1);
-    setUnit('');
     setCookingMethod('');
+
+    // If a specific item is pre-selected (Quick Log), jump straight to quantity phase
+    if (preSelectedItem) {
+      setSelectedItem(preSelectedItem);
+      setQuantity(preSelectedItem.defaultMeasurement?.amount ?? preSelectedItem.defaultQuantity ?? 1);
+      setUnit(preSelectedItem.defaultMeasurement?.unit ?? preSelectedItem.defaultUnit ?? 'pieces');
+      setCookingMethod(preSelectedItem.defaultCookingMethod ?? '');
+    } else {
+      setSelectedItem(null);
+      setQuantity(1);
+      setUnit('');
+    }
   }, [isOpen]);
 
   // Auto-focus
@@ -202,7 +213,7 @@ export function LogItemModal({ isOpen, onClose, onSave, mealLabel }) {
                   onChange={e => setUnit(e.target.value)}
                   className="w-full px-3 py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] outline-none text-sm bg-[var(--color-bg-primary)] transition-all"
                 >
-                  {UNITS.map(u => <option key={u} value={u}>{u}</option>)}
+                  {(selectedItem.type === 'drink' ? DRINK_UNITS : FOOD_UNITS).map(u => <option key={u} value={u}>{u}</option>)}
                 </select>
               </div>
             </div>
@@ -224,12 +235,15 @@ export function LogItemModal({ isOpen, onClose, onSave, mealLabel }) {
 
             {/* Actions */}
             <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => setSelectedItem(null)}
-                className="flex-1 py-2.5 text-sm font-medium border border-[var(--color-border-primary)] rounded-lg hover:bg-[var(--color-hover-bg)] transition-colors"
-              >
-                Back
-              </button>
+              {/* Back button only shown when user picked from search, not when item was pre-selected */}
+              {!preSelectedItem && (
+                <button
+                  onClick={() => setSelectedItem(null)}
+                  className="flex-1 py-2.5 text-sm font-medium border border-[var(--color-border-primary)] rounded-lg hover:bg-[var(--color-hover-bg)] transition-colors"
+                >
+                  Back
+                </button>
+              )}
               <button
                 onClick={handleSave}
                 disabled={!quantity || Number(quantity) <= 0}

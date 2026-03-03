@@ -1,106 +1,97 @@
-// File purpose: Display drink item in library with details and usage stats
-// Related: FoodsView.jsx renders this component
-// Should not include: Form components
+// File purpose: Display a drink item in the library with usage stats and actions.
+// Related: FoodsView.jsx renders this. 2-step delete; no browser confirm().
 
-import { Pencil, Trash2, Plus } from 'lucide-react';
+import { useState } from 'react';
+import { Pencil, Trash2, Plus, AlertCircle } from 'lucide-react';
 
-/**
- * DrinkCard component - displays drink details in library
- * @param {Object} props
- * @param {import('../types').UserDrink} props.drink - Drink data
- * @param {() => void} props.onEdit - Edit callback
- * @param {() => void} props.onDelete - Delete callback
- * @param {() => void} props.onQuickLog - One-tap log callback
- */
+const formatLastUsed = (dateString) => {
+  if (!dateString) return 'Never used';
+  const date = new Date(dateString);
+  const diffDays = Math.floor((new Date() - date) / 86400000);
+  if (diffDays === 0) return 'Today';
+  if (diffDays === 1) return 'Yesterday';
+  if (diffDays < 7)  return `${diffDays}d ago`;
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
+  return date.toLocaleDateString();
+};
+
 export function DrinkCard({ drink, onEdit, onDelete, onQuickLog }) {
-  // Format last used date
-  const formatLastUsed = (dateString) => {
-    if (!dateString) return 'Never used';
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffDays = Math.floor((now - date) / (1000 * 60 * 60 * 24));
-    
-    if (diffDays === 0) return 'Today';
-    if (diffDays === 1) return 'Yesterday';
-    if (diffDays < 7) return `${diffDays} days ago`;
-    if (diffDays < 30) return `${Math.floor(diffDays / 7)} weeks ago`;
-    return date.toLocaleDateString();
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const isGlobal = drink.id.startsWith('g_');
+
+  const handleDeleteClick = () => {
+    if (confirmDelete) { onDelete(); setConfirmDelete(false); }
+    else {
+      setConfirmDelete(true);
+      setTimeout(() => setConfirmDelete(false), 3000);
+    }
   };
 
   return (
-    <div className="bg-[var(--color-bg-primary)] border border-[var(--color-border-primary)] rounded-[var(--radius-md)] p-[var(--spacing-card-padding)] hover:border-[var(--color-accent)] transition-colors duration-[var(--transition-fast)] group">
-      {/* Header with name and actions */}
+    <div className="bg-[var(--color-bg-primary)] border border-[var(--color-border-primary)] rounded-[var(--radius-md)] p-[var(--spacing-card-padding)] hover:border-[var(--color-accent)] transition-colors group">
+
+      {/* Header */}
       <div className="flex items-start justify-between mb-2">
-        <h3 className="text-base font-semibold text-[var(--color-text-primary)]">
-          {drink.name}
-        </h3>
-        <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--transition-fast)]">
+        <div className="flex-1 min-w-0">
+          <h3 className="text-sm font-semibold text-[var(--color-text-primary)] truncate">{drink.name}</h3>
+          {isGlobal && (
+            <span className="text-[10px] text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded-sm">Global</span>
+          )}
+        </div>
+        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2 shrink-0">
+          {/* Quick log */}
           {onQuickLog && (
             <button
               onClick={onQuickLog}
-              className="p-1 mr-1 text-[var(--color-bg-primary)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] rounded-[var(--radius-sm)] cursor-pointer"
-              title="Quick Log to Today"
+              className="p-1 text-white bg-[var(--color-accent)] hover:opacity-80 rounded transition-all"
+              title="Log to today"
             >
-              <Plus size={14} />
+              <Plus size={13} />
             </button>
           )}
+          {/* Edit */}
           {onEdit && (
-            <button
-              onClick={onEdit}
-              className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] rounded-[var(--radius-sm)] cursor-pointer"
-              title="Edit drink"
-            >
-              <Pencil size={14} />
+            <button onClick={onEdit} className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] rounded transition-colors" title="Edit">
+              <Pencil size={13} />
             </button>
           )}
+          {/* Delete — 2-step */}
           {onDelete && (
             <button
-              onClick={onDelete}
-              className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-danger)] rounded-[var(--radius-sm)] cursor-pointer"
-              title="Delete drink"
+              onClick={handleDeleteClick}
+              onBlur={() => setConfirmDelete(false)}
+              className={`flex items-center gap-0.5 px-1.5 py-1 rounded text-xs font-medium transition-colors ${
+                confirmDelete
+                  ? 'bg-[var(--color-danger)] text-white'
+                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-danger)]'
+              }`}
+              title={confirmDelete ? 'Click again to confirm' : 'Delete'}
             >
-              <Trash2 size={14} />
+              {confirmDelete ? <><AlertCircle size={11} /> Del?</> : <Trash2 size={13} />}
             </button>
           )}
         </div>
       </div>
 
-      {/* Category and defaults */}
-      <div className="space-y-1 mb-3">
-        <div className="text-sm text-[var(--color-text-secondary)]">
-          <span className="font-medium">Category: </span>
-          {drink.category}
-        </div>
-        <div className="text-sm text-[var(--color-text-secondary)]">
-          <span className="font-medium">Default: </span>
-          {drink.defaultQuantity} {drink.defaultUnit}
-        </div>
-      </div>
+      {/* Category + defaults */}
+      <p className="text-xs text-[var(--color-text-secondary)] mb-2">
+        {drink.category && <span className="capitalize">{drink.category} · </span>}
+        {drink.defaultQuantity} {drink.defaultUnit}
+      </p>
 
       {/* Tags */}
       {drink.tags && drink.tags.length > 0 && (
-        <div className="mb-3">
-          <div className="flex flex-wrap gap-2">
-            {drink.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="px-2 py-1 text-xs bg-[var(--color-hover-bg)] text-[var(--color-accent)] rounded-[var(--radius-sm)]"
-              >
-                {tag}
-              </span>
-            ))}
-          </div>
+        <div className="flex flex-wrap gap-1 mb-2">
+          {drink.tags.map((tag, i) => (
+            <span key={i} className="px-1.5 py-0.5 text-[10px] bg-[var(--color-hover-bg)] text-[var(--color-accent)] rounded-sm">{tag}</span>
+          ))}
         </div>
       )}
 
       {/* Usage stats */}
-      <div className="flex items-center justify-between pt-3 border-t border-[var(--color-border-primary)]">
-        <span className="text-xs text-[var(--color-text-secondary)]">
-          Used {drink.usageCount || 0} time{drink.usageCount !== 1 ? 's' : ''}
-        </span>
-        <span className="text-xs text-[var(--color-text-secondary)]">
-          {formatLastUsed(drink.lastUsed)}
-        </span>
+      <div className="flex items-center justify-between pt-2 border-t border-[var(--color-border-primary)]">
+        <span className="text-xs text-[var(--color-text-secondary)]">Used {drink.usageCount || 0}×</span>
+        <span className="text-xs text-[var(--color-text-secondary)]">{formatLastUsed(drink.lastUsed)}</span>
       </div>
     </div>
   );
