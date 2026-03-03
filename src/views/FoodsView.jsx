@@ -11,7 +11,7 @@ import { DrinkCard } from '../components/DrinkCard';
 import { DrinkForm } from '../components/DrinkForm';
 import { FoodLibraryWizard } from '../components/food-wizards/FoodLibraryWizard';
 import { Button } from '../components/ui/Button';
-import { getAllFoods, getAllDrinks, deleteFood, deleteDrink } from '../services/db';
+import { getAllFoods, getAllDrinks, deleteFood, deleteDrink, getDailyLog, saveDailyLog, incrementFoodUsage, incrementDrinkUsage } from '../services/db';
 
 export function FoodsView() {
   const [activeTab, setActiveTab] = useState('foods');
@@ -116,18 +116,69 @@ export function FoodsView() {
     await fetchData();
   };
 
+  // Handle one-tap quick log
+  const handleQuickLogItem = async (item, type) => {
+    try {
+      const currentDate = new Date().toISOString().split('T')[0];
+      let log = await getDailyLog(currentDate);
+      
+      if (!log) {
+        log = {
+          id: `day_${currentDate}_${crypto.randomUUID().slice(0, 8)}`,
+          date: currentDate,
+          tags: [],
+          dayNotes: null,
+          meals: [],
+          foods: [],
+          drinks: [],
+          notices: [],
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+      } else {
+        if (!log.foods) log.foods = [];
+        if (!log.drinks) log.drinks = [];
+      }
+      
+      const quantity = item.defaultMeasurement?.amount || item.defaultQuantity || 1;
+      const unit = item.defaultMeasurement?.unit || item.defaultUnit || 'pieces';
+      
+      const entry = {
+        refId: item.id,
+        name: item.name,
+        quantity: quantity,
+        unit: unit,
+        type: type,
+        category: item.category || ''
+      };
+      
+      if (type === 'food') {
+        log.foods.push(entry);
+        await incrementFoodUsage(item.id);
+      } else if (type === 'drink') {
+        log.drinks.push(entry);
+        await incrementDrinkUsage(item.id);
+      }
+      
+      await saveDailyLog(log);
+      await fetchData(); // Refresh usage stats
+    } catch (err) {
+      console.error("Failed to quick log:", err);
+    }
+  };
+
   // Filter foods based on search query
   const filteredFoods = foods.filter(food =>
     food.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    food.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    food.ingredients.some(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase()))
+    (food.tags && food.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))) ||
+    (food.ingredients && food.ingredients.some(ing => ing.name.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   // Filter drinks based on search query
   const filteredDrinks = drinks.filter(drink =>
     drink.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    drink.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    drink.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+    (drink.category && drink.category.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (drink.tags && drink.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())))
   );
 
   if (loading) {
@@ -284,8 +335,9 @@ export function FoodsView() {
                 <FoodCard 
                   key={food.id} 
                   food={food}
-                  onEdit={() => handleEditFoodWizard(food)}
-                  onDelete={() => handleDeleteFood(food.id)}
+                  onEdit={food.id.startsWith('g_') ? null : () => handleEditFoodWizard(food)}
+                  onDelete={food.id.startsWith('g_') ? null : () => handleDeleteFood(food.id)}
+                  onQuickLog={() => handleQuickLogItem(food, 'food')}
                 />
               ))}
             </div>
@@ -319,8 +371,9 @@ export function FoodsView() {
                 <DrinkCard 
                   key={drink.id} 
                   drink={drink}
-                  onEdit={() => handleEditDrink(drink)}
-                  onDelete={() => handleDeleteDrink(drink.id)}
+                  onEdit={drink.id.startsWith('g_') ? null : () => handleEditDrink(drink)}
+                  onDelete={drink.id.startsWith('g_') ? null : () => handleDeleteDrink(drink.id)}
+                  onQuickLog={() => handleQuickLogItem(drink, 'drink')}
                 />
               ))}
             </div>

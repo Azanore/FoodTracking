@@ -2,7 +2,7 @@
 // Related: FoodsView.jsx renders this component
 // Should not include: Form components
 
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Plus } from 'lucide-react';
 
 /**
  * FoodCard component - displays food details in library
@@ -10,8 +10,9 @@ import { Pencil, Trash2 } from 'lucide-react';
  * @param {import('../types').UserFood} props.food - Food data
  * @param {() => void} props.onEdit - Edit callback (wizard)
  * @param {() => void} props.onDelete - Delete callback
+ * @param {() => void} props.onQuickLog - One-tap log callback
  */
-export function FoodCard({ food, onEdit, onDelete }) {
+export function FoodCard({ food, onEdit, onDelete, onQuickLog }) {
   // Format last used date
   const formatLastUsed = (dateString) => {
     if (!dateString) return 'Never used';
@@ -46,6 +47,15 @@ export function FoodCard({ food, onEdit, onDelete }) {
           {food.name}
         </h3>
         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--transition-fast)]">
+          {onQuickLog && (
+            <button
+              onClick={onQuickLog}
+              className="p-1 mr-1 text-[var(--color-bg-primary)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] rounded-[var(--radius-sm)] cursor-pointer"
+              title="Quick Log to Today"
+            >
+              <Plus size={14} />
+            </button>
+          )}
           {onEdit && (
             <button
               onClick={onEdit}

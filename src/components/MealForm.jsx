@@ -100,7 +100,7 @@ export function MealForm({ meal, onSave, onCancel }) {
     <Modal
       isOpen={true}
       onClose={onCancel}
-      title="Edit Meal"
+      title={isEditing ? 'Edit Meal' : 'Add Custom Meal'}
       footer={
         <div className="flex gap-2 justify-end">
           <Button variant="secondary" onClick={onCancel}>
@@ -134,16 +134,21 @@ export function MealForm({ meal, onSave, onCancel }) {
         </FormSection>
 
         {/* Section 2: Tags */}
-        <FormSection title="Tags">
-          <CheckableBadgeGroup
-            label="Meal Tags"
-            items={availableTags}
-            selectedIds={selectedTagIds}
-            onChange={setSelectedTagIds}
-            onAddNew={handleAddNewTag}
-            topCount={8}
-          />
-        </FormSection>
+        <details className="group mb-[var(--spacing-md)] pl-[var(--spacing-md)]">
+          <summary className="text-sm font-semibold text-[var(--color-text-primary)] cursor-pointer select-none mb-2 uppercase tracking-wide opacity-80 hover:opacity-100 transition-opacity flex items-center gap-1">
+            <span className="group-open:rotate-90 transition-transform">▶</span> Advanced (Tags)
+          </summary>
+          <div className="pt-2 pl-2 border-l-2 border-[var(--color-accent)]/20">
+            <CheckableBadgeGroup
+              label="Meal Tags"
+              items={availableTags}
+              selectedIds={selectedTagIds}
+              onChange={setSelectedTagIds}
+              onAddNew={handleAddNewTag}
+              topCount={8}
+            />
+          </div>
+        </details>
 
         {/* Section 3: Notes */}
         <FormSection title="Notes">

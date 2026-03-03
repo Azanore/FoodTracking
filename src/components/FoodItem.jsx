@@ -1,37 +1,31 @@
-// File purpose: Display a single food entry with all properties
-// Related: MealCard.jsx uses this component, types.js defines FoodEntry
-// Wizard Integration: Uses EditFoodInMealWizard for guided editing
-// Should not include: Complex form logic
+// File purpose: Display a single food entry with inline quantity editing.
+// Related: MealCard.jsx uses this component.
 
 import { useState } from 'react';
-import { Edit2, Trash2, Wand2 } from 'lucide-react';
-import { EditFoodInMealWizard } from './food-wizards/EditFoodInMealWizard';
-
-/**
- * FoodItem component - displays a food entry with all details
- * 
- * Uses EditFoodInMealWizard for editing (guided 4-step wizard starting on step 2)
- * 
- * @param {Object} props
- * @param {import('../types').FoodEntry} props.food - Food entry data
- * @param {Function} [props.onEdit] - Edit callback (receives updated FoodEntry)
- * @param {Function} [props.onDelete] - Delete callback
- */
+import { Edit2, Trash2 } from 'lucide-react';
 export function FoodItem({ food, onEdit, onDelete }) {
-  const [isEditingWizard, setIsEditingWizard] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editQuantity, setEditQuantity] = useState(food.quantity);
 
-  const handleWizardComplete = (updatedEntry) => {
-    onEdit?.(updatedEntry);
-    setIsEditingWizard(false);
+  const handleSave = () => {
+    onEdit?.({ ...food, quantity: Number(editQuantity) });
+    setIsEditing(false);
   };
 
-  if (isEditingWizard) {
+  if (isEditing) {
     return (
-      <EditFoodInMealWizard
-        foodEntry={food}
-        onComplete={handleWizardComplete}
-        onCancel={() => setIsEditingWizard(false)}
-      />
+      <div className="flex items-center gap-2 p-1 bg-white border border-blue-200 rounded">
+        <input 
+          type="number" 
+          value={editQuantity} 
+          onChange={e => setEditQuantity(e.target.value)} 
+          className="w-16 px-2 py-1 border rounded text-xs" 
+          min="0.1" step="0.1" autoFocus 
+        />
+        <span className="text-xs">{food.unit}</span>
+        <button onClick={handleSave} className="px-2 py-1 text-xs bg-[var(--color-accent)] text-white rounded">Save</button>
+        <button onClick={() => setIsEditing(false)} className="px-2 py-1 text-xs bg-gray-200 rounded">Cancel</button>
+      </div>
     );
   }
   return (
@@ -51,7 +45,7 @@ export function FoodItem({ food, onEdit, onDelete }) {
           </div>
           
           {/* Ingredients badges */}
-          {food.ingredients.length > 0 && (
+          {food.ingredients && food.ingredients.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-1.5">
               {food.ingredients.map((ing, index) => (
                 <span
@@ -65,7 +59,7 @@ export function FoodItem({ food, onEdit, onDelete }) {
           )}
           
           {/* Extras badges */}
-          {food.extras.length > 0 && (
+          {food.extras && food.extras.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-1.5">
               {food.extras.map((extra, index) => (
                 <span
@@ -79,7 +73,7 @@ export function FoodItem({ food, onEdit, onDelete }) {
           )}
           
           {/* Tags badges */}
-          {food.tags.length > 0 && (
+          {food.tags && food.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-1.5">
               {food.tags.map((tag, index) => (
                 <span
@@ -105,7 +99,7 @@ export function FoodItem({ food, onEdit, onDelete }) {
           <div className="flex gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--transition-fast)]">
             {onEdit && (
               <button
-                onClick={() => setIsEditingWizard(true)}
+                onClick={() => setIsEditing(true)}
                 className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] rounded-[var(--radius-sm)] transition-colors duration-[var(--transition-fast)] cursor-pointer"
                 title="Edit food"
               >

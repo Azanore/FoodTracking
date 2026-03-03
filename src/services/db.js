@@ -8,6 +8,8 @@ const generateId = (prefix) => `${prefix}_${crypto.randomUUID().slice(0, 8)}`;
 // Get current ISO timestamp
 const now = () => new Date().toISOString();
 
+import globalFoods from '../data/global_foods.json';
+
 // ============================================================================
 // Daily Logs
 // ============================================================================
@@ -43,19 +45,28 @@ export const saveDailyLog = async (log) => {
 
 export const getAllFoods = async () => {
   try {
-    const foods = [];
+    const customFoods = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key.startsWith('food_')) {
+      if (key.startsWith('u_food_') || key.startsWith('food_')) {
         const data = localStorage.getItem(key);
         const food = JSON.parse(data);
-        // Filter out soft-deleted foods
         if (!food.isDeleted) {
-          foods.push(food);
+          customFoods.push(food);
         }
       }
     }
-    return foods;
+    // Return merged array of static global foods + user custom foods
+    const globalFoodsSubset = globalFoods.filter(item => item.type === 'food').map(gf => {
+      const statsStr = localStorage.getItem(`stats_${gf.id}`);
+      if (statsStr) {
+        const stats = JSON.parse(statsStr);
+        return { ...gf, usageCount: stats.usageCount || 0, lastUsed: stats.lastUsed || null };
+      }
+      return gf;
+    });
+
+    return [...globalFoodsSubset, ...customFoods];
   } catch (error) {
     console.error('Failed to get all foods:', error);
     throw new Error('Failed to load foods');
@@ -64,6 +75,11 @@ export const getAllFoods = async () => {
 
 export const getFoodById = async (id) => {
   try {
+    // Check master global dictionary first
+    const globalMatch = globalFoods.find(f => f.id === id);
+    if (globalMatch) return globalMatch;
+
+    // Check custom library
     const data = localStorage.getItem(id);
     return data ? JSON.parse(data) : null;
   } catch (error) {
@@ -74,10 +90,14 @@ export const getFoodById = async (id) => {
 
 export const saveFood = async (food) => {
   try {
-    const isNew = !food.id;
+    // Cannot overwrite global dictionary
+    if (food.id && food.id.startsWith('g_')) {
+      throw new Error('Cannot modify global static foods.');
+    }
+    
     const savedFood = {
       ...food,
-      id: food.id || generateId('food'),
+      id: food.id || generateId('u_food'),
       createdAt: food.createdAt || now(),
       lastUsed: food.lastUsed || null,
       usageCount: food.usageCount || 0,
@@ -93,9 +113,9 @@ export const saveFood = async (food) => {
 
 export const deleteFood = async (id) => {
   try {
+    if (id.startsWith('g_')) return; // Cannot delete globals
     const food = await getFoodById(id);
     if (food) {
-      // Soft delete: mark as deleted but preserve data
       food.isDeleted = true;
       localStorage.setItem(id, JSON.stringify(food));
     }
@@ -107,6 +127,16 @@ export const deleteFood = async (id) => {
 
 export const incrementFoodUsage = async (id) => {
   try {
+    if (id.startsWith('g_')) {
+      // Track global usage locally if necessary, or just skip it
+      // Let's create an override local object just to track stats for sorting.
+      let stats = JSON.parse(localStorage.getItem(`stats_${id}`) || '{"usageCount":0}');
+      stats.usageCount += 1;
+      stats.lastUsed = now();
+      localStorage.setItem(`stats_${id}`, JSON.stringify(stats));
+      return;
+    }
+
     const food = await getFoodById(id);
     if (food) {
       food.usageCount = (food.usageCount || 0) + 1;
@@ -125,19 +155,28 @@ export const incrementFoodUsage = async (id) => {
 
 export const getAllDrinks = async () => {
   try {
-    const drinks = [];
+    const customDrinks = [];
     for (let i = 0; i < localStorage.length; i++) {
       const key = localStorage.key(i);
-      if (key.startsWith('drink_')) {
+      if (key.startsWith('u_drink_') || key.startsWith('drink_')) {
         const data = localStorage.getItem(key);
         const drink = JSON.parse(data);
-        // Filter out soft-deleted drinks
         if (!drink.isDeleted) {
-          drinks.push(drink);
+          customDrinks.push(drink);
         }
       }
     }
-    return drinks;
+
+    const globalDrinks = globalFoods.filter(item => item.type === 'drink').map(gd => {
+      const statsStr = localStorage.getItem(`stats_${gd.id}`);
+      if (statsStr) {
+        const stats = JSON.parse(statsStr);
+        return { ...gd, usageCount: stats.usageCount || 0, lastUsed: stats.lastUsed || null };
+      }
+      return gd;
+    });
+
+    return [...globalDrinks, ...customDrinks];
   } catch (error) {
     console.error('Failed to get all drinks:', error);
     throw new Error('Failed to load drinks');
@@ -146,6 +185,9 @@ export const getAllDrinks = async () => {
 
 export const getDrinkById = async (id) => {
   try {
+    const globalMatch = globalFoods.find(f => f.id === id && f.type === 'drink');
+    if (globalMatch) return globalMatch;
+
     const data = localStorage.getItem(id);
     return data ? JSON.parse(data) : null;
   } catch (error) {
@@ -156,10 +198,13 @@ export const getDrinkById = async (id) => {
 
 export const saveDrink = async (drink) => {
   try {
-    const isNew = !drink.id;
+    if (drink.id && drink.id.startsWith('g_')) {
+      throw new Error('Cannot modify global static drinks.');
+    }
+
     const savedDrink = {
       ...drink,
-      id: drink.id || generateId('drink'),
+      id: drink.id || generateId('u_drink'),
       createdAt: drink.createdAt || now(),
       lastUsed: drink.lastUsed || null,
       usageCount: drink.usageCount || 0,
@@ -175,9 +220,9 @@ export const saveDrink = async (drink) => {
 
 export const deleteDrink = async (id) => {
   try {
+    if (id.startsWith('g_')) return;
     const drink = await getDrinkById(id);
     if (drink) {
-      // Soft delete: mark as deleted but preserve data
       drink.isDeleted = true;
       localStorage.setItem(id, JSON.stringify(drink));
     }
@@ -189,6 +234,14 @@ export const deleteDrink = async (id) => {
 
 export const incrementDrinkUsage = async (id) => {
   try {
+    if (id.startsWith('g_')) {
+      let stats = JSON.parse(localStorage.getItem(`stats_${id}`) || '{"usageCount":0}');
+      stats.usageCount += 1;
+      stats.lastUsed = now();
+      localStorage.setItem(`stats_${id}`, JSON.stringify(stats));
+      return;
+    }
+
     const drink = await getDrinkById(id);
     if (drink) {
       drink.usageCount = (drink.usageCount || 0) + 1;

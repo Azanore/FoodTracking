@@ -50,16 +50,23 @@ export const TagsNotesStep = memo(function TagsNotesStep() {
       <WizardStepArt step="details" />
       
       {/* Tags */}
-      <MultiSelectStep
-        label="Tags"
-        items={availableTags}
-        selectedIds={formData.tags || []}
-        onChange={handleTagsChange}
-        renderBadge={(item) => item.name}
-        allowCreate={true}
-        onCreateNew={handleAddTag}
-        topCount={8}
-      />
+      <details className="group mt-4">
+        <summary className="text-xs font-semibold text-gray-700 cursor-pointer select-none mb-2 uppercase tracking-wide opacity-80 hover:opacity-100 transition-opacity flex items-center gap-1">
+          <span className="group-open:rotate-90 transition-transform">▶</span> Advanced Options (Tags)
+        </summary>
+        <div className="pt-2 pl-2 border-l-2 border-blue-500/20">
+          <MultiSelectStep
+            label="Tags"
+            items={availableTags}
+            selectedIds={formData.tags || []}
+            onChange={handleTagsChange}
+            renderBadge={(item) => item.name}
+            allowCreate={true}
+            onCreateNew={handleAddTag}
+            topCount={8}
+          />
+        </div>
+      </details>
 
       {/* Notes */}
       <div>

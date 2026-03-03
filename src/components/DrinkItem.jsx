@@ -4,30 +4,29 @@
 
 import { useState } from 'react';
 import { Edit2, Trash2 } from 'lucide-react';
-import { DrinkEntryForm } from './DrinkEntryForm';
-
-/**
- * DrinkItem component - displays a drink entry with all details
- * @param {Object} props
- * @param {import('../types').DrinkEntry} props.drink - Drink entry data
- * @param {Function} [props.onEdit] - Edit callback (receives updated DrinkEntry)
- * @param {Function} [props.onDelete] - Delete callback
- */
 export function DrinkItem({ drink, onEdit, onDelete }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [editQuantity, setEditQuantity] = useState(drink.quantity);
 
-  const handleSave = (updatedEntry) => {
-    onEdit?.(updatedEntry);
+  const handleSave = () => {
+    onEdit?.({ ...drink, quantity: Number(editQuantity) });
     setIsEditing(false);
   };
 
   if (isEditing) {
     return (
-      <DrinkEntryForm
-        drinkEntry={drink}
-        onSave={handleSave}
-        onCancel={() => setIsEditing(false)}
-      />
+      <div className="flex items-center gap-2 p-1 bg-white border border-blue-200 rounded">
+        <input 
+          type="number" 
+          value={editQuantity} 
+          onChange={e => setEditQuantity(e.target.value)} 
+          className="w-16 px-2 py-1 border rounded text-xs" 
+          min="0.1" step="0.1" autoFocus 
+        />
+        <span className="text-xs">{drink.unit}</span>
+        <button onClick={handleSave} className="px-2 py-1 text-xs bg-[var(--color-accent)] text-white rounded">Save</button>
+        <button onClick={() => setIsEditing(false)} className="px-2 py-1 text-xs bg-gray-200 rounded">Cancel</button>
+      </div>
     );
   }
 
@@ -47,7 +46,7 @@ export function DrinkItem({ drink, onEdit, onDelete }) {
           </div>
           
           {/* Tags badges */}
-          {drink.tags.length > 0 && (
+          {drink.tags && drink.tags.length > 0 && (
             <div className="flex flex-wrap gap-1 mb-1.5">
               {drink.tags.map((tag, index) => (
                 <span

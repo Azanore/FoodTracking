@@ -2,7 +2,7 @@
 // Related: FoodsView.jsx renders this component
 // Should not include: Form components
 
-import { Pencil, Trash2 } from 'lucide-react';
+import { Pencil, Trash2, Plus } from 'lucide-react';
 
 /**
  * DrinkCard component - displays drink details in library
@@ -10,8 +10,9 @@ import { Pencil, Trash2 } from 'lucide-react';
  * @param {import('../types').UserDrink} props.drink - Drink data
  * @param {() => void} props.onEdit - Edit callback
  * @param {() => void} props.onDelete - Delete callback
+ * @param {() => void} props.onQuickLog - One-tap log callback
  */
-export function DrinkCard({ drink, onEdit, onDelete }) {
+export function DrinkCard({ drink, onEdit, onDelete, onQuickLog }) {
   // Format last used date
   const formatLastUsed = (dateString) => {
     if (!dateString) return 'Never used';
@@ -34,20 +35,33 @@ export function DrinkCard({ drink, onEdit, onDelete }) {
           {drink.name}
         </h3>
         <div className="flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-[var(--transition-fast)]">
-          <button
-            onClick={onEdit}
-            className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] rounded-[var(--radius-sm)] cursor-pointer"
-            title="Edit drink"
-          >
-            <Pencil size={14} />
-          </button>
-          <button
-            onClick={onDelete}
-            className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-danger)] rounded-[var(--radius-sm)] cursor-pointer"
-            title="Delete drink"
-          >
-            <Trash2 size={14} />
-          </button>
+          {onQuickLog && (
+            <button
+              onClick={onQuickLog}
+              className="p-1 mr-1 text-[var(--color-bg-primary)] bg-[var(--color-accent)] hover:bg-[var(--color-accent-hover)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] rounded-[var(--radius-sm)] cursor-pointer"
+              title="Quick Log to Today"
+            >
+              <Plus size={14} />
+            </button>
+          )}
+          {onEdit && (
+            <button
+              onClick={onEdit}
+              className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-border-focus)] rounded-[var(--radius-sm)] cursor-pointer"
+              title="Edit drink"
+            >
+              <Pencil size={14} />
+            </button>
+          )}
+          {onDelete && (
+            <button
+              onClick={onDelete}
+              className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] transition-colors duration-[var(--transition-fast)] focus:outline-none focus:ring-2 focus:ring-[var(--color-danger)] rounded-[var(--radius-sm)] cursor-pointer"
+              title="Delete drink"
+            >
+              <Trash2 size={14} />
+            </button>
+          )}
         </div>
       </div>
 

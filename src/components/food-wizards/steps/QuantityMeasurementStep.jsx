@@ -115,23 +115,29 @@ export const QuantityMeasurementStep = memo(function QuantityMeasurementStep() {
         error={errors?.unit}
       />
 
-      {/* Portion */}
-      <CheckableButtonGroup
-        label="Portion"
-        options={PORTIONS}
-        value={formData.portion || ''}
-        onChange={handlePortionChange}
-        columns={4}
-      />
+      {/* Advanced Measurement Options (Portion, Cooking Method) */}
+      <details className="group mt-4">
+        <summary className="text-xs font-semibold text-gray-700 cursor-pointer select-none mb-2 uppercase tracking-wide opacity-80 hover:opacity-100 transition-opacity flex items-center gap-1">
+          <span className="group-open:rotate-90 transition-transform">▶</span> Advanced Options (Portion, Cooking)
+        </summary>
+        <div className="pt-2 pl-2 space-y-6 border-l-2 border-blue-500/20">
+          <CheckableButtonGroup
+            label="Portion"
+            options={PORTIONS}
+            value={formData.portion || ''}
+            onChange={handlePortionChange}
+            columns={4}
+          />
 
-      {/* Cooking Method */}
-      <CheckableButtonGroup
-        label="Cooking Method"
-        options={COOKING_METHODS}
-        value={formData.cookingMethod || ''}
-        onChange={handleCookingMethodChange}
-        columns={5}
-      />
+          <CheckableButtonGroup
+            label="Cooking Method"
+            options={COOKING_METHODS}
+            value={formData.cookingMethod || ''}
+            onChange={handleCookingMethodChange}
+            columns={5}
+          />
+        </div>
+      </details>
     </div>
   );
 });
