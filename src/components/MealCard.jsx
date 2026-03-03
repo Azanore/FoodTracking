@@ -133,7 +133,7 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
 
       {/* ── Expanded content ──────────────────────────────────────────── */}
       {isExpanded && (
-        <div className="px-[var(--spacing-card-padding)] pb-[var(--spacing-card-padding)] pt-2 md:pt-1 border-t border-[var(--color-border-primary)]">
+        <div className="px-[var(--spacing-card-padding)] py-2 border-t border-[var(--color-border-primary)]">
 
           {/* Meal tags */}
           {meal.tags.length > 0 && (
@@ -148,7 +148,7 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
 
           {/* Foods */}
           {meal.foods.length > 0 && (
-            <div className="space-y-2 md:space-y-1.5 mb-2 md:mb-1.5">
+            <div className="flex flex-col gap-2 md:gap-1.5">
               {meal.foods.map((food, i) => (
                 <div key={i} className="p-2.5 md:p-2 bg-[var(--color-bg-secondary)] rounded-md border border-[var(--color-border-primary)]">
                   <FoodItem
@@ -162,7 +162,7 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
 
           {/* Drinks */}
           {meal.drinks.length > 0 && (
-            <div className="space-y-2 md:space-y-1.5 mb-2 md:mb-1.5">
+            <div className="flex flex-col gap-2 md:gap-1.5">
               {meal.drinks.map((drink, i) => (
                 <div key={i} className="p-2.5 md:p-2 bg-[var(--color-bg-secondary)] rounded-md border border-[var(--color-border-primary)]">
                   <DrinkItem
@@ -174,19 +174,19 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
             </div>
           )}
 
-          {/* Meal notes */}
-          {meal.notes && (
-            <p className="text-xs text-[var(--color-text-secondary)] italic px-1 mt-2 md:mt-1">{meal.notes}</p>
-          )}
-
           {/* Empty nudge */}
           {itemCount === 0 && (
             <button
               onClick={() => setShowModal(true)}
-              className="w-full mt-2 md:mt-1 py-3 md:py-2 text-xs text-[var(--color-text-secondary)] border border-dashed border-[var(--color-border-primary)] rounded-md hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors touch-manipulation"
+              className="w-full py-3 md:py-2 text-xs text-[var(--color-text-secondary)] border border-dashed border-[var(--color-border-primary)] rounded-md hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors touch-manipulation"
             >
               + log something here
             </button>
+          )}
+
+          {/* Meal notes */}
+          {meal.notes && (
+            <p className="text-xs text-[var(--color-text-secondary)] italic px-1 mt-2 md:mt-1">{meal.notes}</p>
           )}
         </div>
       )}

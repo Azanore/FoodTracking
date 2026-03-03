@@ -40,6 +40,8 @@ const buildDefaultMeals = () => [
 export function FoodsView() {
   const [activeTab, setActiveTab] = useState('foods');
   const [searchQuery, setSearchQuery] = useState('');
+  const [activeTag, setActiveTag] = useState(null);
+  const [sortBy, setSortBy] = useState('name');
   const [foods, setFoods] = useState([]);
   const [drinks, setDrinks] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -75,21 +77,71 @@ export function FoodsView() {
   // ── Filtering ─────────────────────────────────────────────────────────────
 
   const filteredFoods = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return foods.filter(f =>
-      f.name.toLowerCase().includes(q) ||
-      (f.tags && f.tags.some(t => t.toLowerCase().includes(q)))
-    );
-  }, [foods, searchQuery]);
+    let result = foods;
+
+    // Filter by search query
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(f =>
+        f.name.toLowerCase().includes(q) ||
+        (f.tags && f.tags.some(t => t.toLowerCase().includes(q)))
+      );
+    }
+
+    // Filter by active tag
+    if (activeTag) {
+      result = result.filter(f => f.tags && f.tags.includes(activeTag));
+    }
+
+    // Sort
+    if (sortBy === 'name') {
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'usage') {
+      result = [...result].sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
+    } else if (sortBy === 'recent') {
+      result = [...result].sort((a, b) => {
+        if (!a.lastUsed) return 1;
+        if (!b.lastUsed) return -1;
+        return new Date(b.lastUsed) - new Date(a.lastUsed);
+      });
+    }
+
+    return result;
+  }, [foods, searchQuery, activeTag, sortBy]);
 
   const filteredDrinks = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return drinks.filter(d =>
-      d.name.toLowerCase().includes(q) ||
-      (d.category && d.category.toLowerCase().includes(q)) ||
-      (d.tags && d.tags.some(t => t.toLowerCase().includes(q)))
-    );
-  }, [drinks, searchQuery]);
+    let result = drinks;
+
+    // Filter by search query
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter(d =>
+        d.name.toLowerCase().includes(q) ||
+        (d.category && d.category.toLowerCase().includes(q)) ||
+        (d.tags && d.tags.some(t => t.toLowerCase().includes(q)))
+      );
+    }
+
+    // Filter by active tag
+    if (activeTag) {
+      result = result.filter(d => d.tags && d.tags.includes(activeTag));
+    }
+
+    // Sort
+    if (sortBy === 'name') {
+      result = [...result].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === 'usage') {
+      result = [...result].sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
+    } else if (sortBy === 'recent') {
+      result = [...result].sort((a, b) => {
+        if (!a.lastUsed) return 1;
+        if (!b.lastUsed) return -1;
+        return new Date(b.lastUsed) - new Date(a.lastUsed);
+      });
+    }
+
+    return result;
+  }, [drinks, searchQuery, activeTag, sortBy]);
 
   // ── Add / Edit ────────────────────────────────────────────────────────────
 
@@ -199,23 +251,25 @@ export function FoodsView() {
           </button>
         </div>
 
-        {/* Tabs + Search */}
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
-          <div className="flex border-b border-[var(--color-border-primary)] shrink-0">
-            {['foods', 'drinks'].map(tab => (
-              <button
-                key={tab}
-                onClick={() => setActiveTab(tab)}
-                className={`pb-2 px-1 mr-4 text-sm font-medium capitalize transition-all border-b-2 -mb-px touch-manipulation ${activeTab === tab
-                  ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-                  : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                  }`}
-              >
-                {tab === 'foods' ? `Foods (${foods.length})` : `Drinks (${drinks.length})`}
-              </button>
-            ))}
-          </div>
+        {/* Tabs */}
+        <div className="flex border-b border-[var(--color-border-primary)] mb-3">
+          {['foods', 'drinks'].map(tab => (
+            <button
+              key={tab}
+              onClick={() => { setActiveTab(tab); setActiveTag(null); setSearchQuery(''); }}
+              className={`pb-2 px-1 mr-4 text-sm font-medium capitalize transition-all border-b-2 -mb-px touch-manipulation ${activeTab === tab
+                ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                }`}
+            >
+              {tab === 'foods' ? `Foods (${foods.length})` : `Drinks (${drinks.length})`}
+            </button>
+          ))}
+        </div>
 
+        {/* Search + Sort */}
+        <div className="flex items-center gap-3">
+          {/* Search */}
           <div className="relative flex-1">
             <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
             <input
@@ -235,7 +289,32 @@ export function FoodsView() {
               </button>
             )}
           </div>
+
+          {/* Sort */}
+          <select
+            value={sortBy}
+            onChange={e => setSortBy(e.target.value)}
+            className="px-3 py-2.5 md:py-2 text-sm border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] transition-all shrink-0"
+          >
+            <option value="name">Name</option>
+            <option value="usage">Most used</option>
+            <option value="recent">Recent</option>
+          </select>
         </div>
+
+        {/* Active tag filter */}
+        {activeTag && (
+          <div className="flex items-center gap-2 mt-3">
+            <span className="text-xs text-[var(--color-text-secondary)]">Filtered by:</span>
+            <button
+              onClick={() => setActiveTag(null)}
+              className="flex items-center gap-1 px-2 py-1 text-xs bg-[var(--color-accent)]/10 text-[var(--color-accent)] rounded-md hover:bg-[var(--color-accent)]/20 transition-colors"
+            >
+              {activeTag}
+              <X size={12} />
+            </button>
+          </div>
+        )}
       </div>{/* end sticky header */}
 
       {/* ── Scrollable content ── */}
@@ -256,6 +335,7 @@ export function FoodsView() {
                   onEdit={food.id.startsWith('g_') ? null : () => openEdit(food)}
                   onDelete={food.id.startsWith('g_') ? null : () => handleDeleteFood(food.id)}
                   onQuickLog={() => handleQuickLog(food)}
+                  onTagClick={(tag) => setActiveTag(tag)}
                 />
               ))}
             </div>
@@ -277,6 +357,7 @@ export function FoodsView() {
                   onEdit={drink.id.startsWith('g_') ? null : () => openEdit(drink)}
                   onDelete={drink.id.startsWith('g_') ? null : () => handleDeleteDrink(drink.id)}
                   onQuickLog={() => handleQuickLog(drink)}
+                  onTagClick={(tag) => setActiveTag(tag)}
                 />
               ))}
             </div>

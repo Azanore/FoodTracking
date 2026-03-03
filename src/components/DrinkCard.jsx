@@ -15,7 +15,7 @@ const formatLastUsed = (dateString) => {
   return date.toLocaleDateString();
 };
 
-export function DrinkCard({ drink, onEdit, onDelete, onQuickLog }) {
+export function DrinkCard({ drink, onEdit, onDelete, onQuickLog, onTagClick }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const isGlobal = drink.id.startsWith('g_');
 
@@ -86,7 +86,13 @@ export function DrinkCard({ drink, onEdit, onDelete, onQuickLog }) {
       {drink.tags && drink.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mb-2">
           {drink.tags.map((tag, i) => (
-            <span key={i} className="px-1.5 py-0.5 text-[10px] bg-[var(--color-hover-bg)] text-[var(--color-accent)] rounded-sm">{tag}</span>
+            <button
+              key={i}
+              onClick={() => onTagClick?.(tag)}
+              className="px-1.5 py-0.5 text-[10px] bg-[var(--color-hover-bg)] text-[var(--color-accent)] rounded-sm hover:bg-[var(--color-accent)]/10 transition-colors cursor-pointer"
+            >
+              {tag}
+            </button>
           ))}
         </div>
       )}
