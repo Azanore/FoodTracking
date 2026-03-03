@@ -143,6 +143,18 @@ body {
   font-size: var(--font-size-base);
   color: var(--color-text-primary);
   background-color: var(--color-bg-primary);
+  overflow-x: hidden;
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Touch action optimization for mobile */
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
 }
 
 /* Custom scrollbar */
@@ -190,4 +202,11 @@ body {
 
 .animate-fade-in {
   animation: fade-in var(--transition-fast) var(--ease-in);
+}
+
+/* Mobile safe area support (notch/dynamic island) */
+@supports (padding: env(safe-area-inset-bottom)) {
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
 }

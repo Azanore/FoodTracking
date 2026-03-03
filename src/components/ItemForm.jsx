@@ -3,10 +3,10 @@
 // Should not include: Daily logging, meal management.
 
 import { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { saveFood, saveDrink } from '../services/db';
 
-const FOOD_UNITS  = ['pieces', 'slices', 'plate', 'bowl', 'cup', 'g', 'oz', 'serving', 'spoon', 'tablespoon', 'teaspoon'];
+const FOOD_UNITS = ['pieces', 'slices', 'plate', 'bowl', 'cup', 'g', 'oz', 'serving', 'spoon', 'tablespoon', 'teaspoon'];
 const DRINK_UNITS = ['ml', 'L', 'glass', 'cup', 'oz', 'can', 'bottle', 'serving', 'tablespoon', 'teaspoon'];
 const COOKING_METHODS = ['raw', 'fried', 'baked', 'boiled', 'steamed', 'grilled', 'roasted', 'stewed', 'sautéed', 'blanched'];
 const DRINK_CATEGORIES = ['Water', 'Juice', 'Tea', 'Coffee', 'Dairy', 'Soda', 'Other'];
@@ -21,20 +21,21 @@ const DRINK_CATEGORIES = ['Water', 'Juice', 'Tea', 'Coffee', 'Dairy', 'Soda', 'O
  * @param {Function}    props.onCancel
  */
 export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
-  const isEditing  = !!item;
+  const isEditing = !!item;
   const lockedType = isEditing ? (item.type ?? (item.category ? 'drink' : 'food')) : null;
 
-  const [type, setType]                   = useState(lockedType ?? defaultType);
-  const [name, setName]                   = useState(item?.name ?? '');
-  const [defaultQuantity, setDefaultQty]  = useState(item?.defaultQuantity ?? 1);
-  const [defaultUnit, setDefaultUnit]     = useState(item?.defaultUnit ?? (defaultType === 'drink' ? 'glass' : 'pieces'));
+  const [type, setType] = useState(lockedType ?? defaultType);
+  const [name, setName] = useState(item?.name ?? '');
+  const [defaultQuantity, setDefaultQty] = useState(item?.defaultQuantity ?? 1);
+  const [defaultUnit, setDefaultUnit] = useState(item?.defaultUnit ?? (defaultType === 'drink' ? 'glass' : 'pieces'));
   const [cookingMethod, setCookingMethod] = useState(item?.defaultCookingMethod ?? '');
-  const [category, setCategory]           = useState(item?.category ?? 'Other');
-  const [tags, setTags]                   = useState(item?.tags ?? []);
-  const [notes, setNotes]                 = useState(item?.notes ?? '');
-  const [error, setError]                 = useState('');
-  const [saving, setSaving]               = useState(false);
-  const tagRef  = useRef(null);
+  const [category, setCategory] = useState(item?.category ?? 'Other');
+  const [tags, setTags] = useState(item?.tags ?? []);
+  const [tagInput, setTagInput] = useState('');
+  const [notes, setNotes] = useState(item?.notes ?? '');
+  const [error, setError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const tagRef = useRef(null);
   const nameRef = useRef(null);
 
   // Focus name on open
@@ -53,19 +54,28 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
   }, [type]);
 
   const handleTagKeyDown = (e) => {
-    if (e.key === 'Enter' && e.target.value.trim()) {
+    if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
-      const tag = e.target.value.trim();
+      const tag = tagInput.trim();
       if (!tags.includes(tag)) setTags([...tags, tag]);
-      e.target.value = '';
+      setTagInput('');
     }
-    if (e.key === 'Backspace' && !e.target.value && tags.length > 0) {
+    if (e.key === 'Backspace' && !tagInput && tags.length > 0) {
       setTags(tags.slice(0, -1));
     }
   };
 
+  const handleTagAdd = () => {
+    if (tagInput.trim()) {
+      const tag = tagInput.trim();
+      if (!tags.includes(tag)) setTags([...tags, tag]);
+      setTagInput('');
+      tagRef.current?.focus();
+    }
+  };
+
   const handleSubmit = async () => {
-    if (!name.trim())              { setError('Name is required.'); return; }
+    if (!name.trim()) { setError('Name is required.'); return; }
     if (Number(defaultQuantity) <= 0) { setError('Default quantity must be greater than 0.'); return; }
     setError('');
     setSaving(true);
@@ -121,11 +131,10 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
                   key={t}
                   type="button"
                   onClick={() => setType(t)}
-                  className={`py-2 rounded-xl border text-sm font-medium capitalize transition-all ${
-                    type === t
-                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
-                      : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-hover-bg)]'
-                  }`}
+                  className={`py-2 rounded-xl border text-sm font-medium capitalize transition-all ${type === t
+                    ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                    : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40 hover:bg-[var(--color-hover-bg)]'
+                    }`}
                 >
                   {t === 'food' ? '🍽 Food' : '🥤 Drink'}
                 </button>
@@ -142,7 +151,7 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
               value={name}
               onChange={e => setName(e.target.value)}
               placeholder={type === 'drink' ? 'e.g., Mint Tea' : 'e.g., Chicken Breast'}
-              className="w-full px-3 py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none text-sm transition-all"
+              className="w-full px-3 py-2.5 md:py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none text-sm transition-all"
             />
           </div>
 
@@ -156,11 +165,10 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
                     key={c}
                     type="button"
                     onClick={() => setCategory(c)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${
-                      category === c
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
-                        : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40'
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-medium border transition-all ${category === c
+                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40'
+                      }`}
                   >
                     {c}
                   </button>
@@ -179,7 +187,7 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
                 step="0.1"
                 value={defaultQuantity}
                 onChange={e => setDefaultQty(e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none text-sm transition-all"
+                className="w-full px-3 py-2.5 md:py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none text-sm transition-all"
               />
             </div>
             <div>
@@ -187,7 +195,7 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
               <select
                 value={defaultUnit}
                 onChange={e => setDefaultUnit(e.target.value)}
-                className="w-full px-3 py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] outline-none text-sm bg-[var(--color-bg-primary)] transition-all"
+                className="w-full px-3 py-2.5 md:py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] outline-none text-sm bg-[var(--color-bg-primary)] transition-all"
               >
                 {(type === 'drink' ? DRINK_UNITS : FOOD_UNITS).map(u => <option key={u} value={u}>{u}</option>)}
               </select>
@@ -206,11 +214,10 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
                     key={m}
                     type="button"
                     onClick={() => setCookingMethod(cookingMethod === m ? '' : m)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium border capitalize transition-all ${
-                      cookingMethod === m
-                        ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
-                        : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40'
-                    }`}
+                    className={`px-3 py-1 rounded-full text-xs font-medium border capitalize transition-all ${cookingMethod === m
+                      ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
+                      : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40'
+                      }`}
                   >
                     {m}
                   </button>
@@ -224,25 +231,38 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
             <label className="block text-xs font-semibold mb-1.5 text-[var(--color-text-secondary)] uppercase tracking-wide">
               Tags <span className="normal-case font-normal opacity-70">(optional)</span>
             </label>
-            <div
-              className="flex flex-wrap gap-1.5 px-3 py-2 border border-[var(--color-border-primary)] rounded-lg focus-within:border-[var(--color-accent)] focus-within:ring-2 focus-within:ring-[var(--color-accent)]/20 transition-all min-h-[40px] cursor-text"
-              onClick={() => tagRef.current?.focus()}
-            >
-              {tags.map(tag => (
-                <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-xs rounded-full font-medium">
-                  {tag}
-                  <button type="button" onClick={e => { e.stopPropagation(); setTags(tags.filter(t => t !== tag)); }} className="hover:opacity-60">
-                    <X size={10} />
-                  </button>
-                </span>
-              ))}
+            {/* Tag pills display */}
+            {tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mb-2">
+                {tags.map(tag => (
+                  <span key={tag} className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-xs rounded-full font-medium">
+                    {tag}
+                    <button type="button" onClick={() => setTags(tags.filter(t => t !== tag))} className="hover:opacity-60">
+                      <X size={10} />
+                    </button>
+                  </span>
+                ))}
+              </div>
+            )}
+            {/* Tag input */}
+            <div className="flex gap-2">
               <input
                 ref={tagRef}
                 type="text"
+                value={tagInput}
+                onChange={e => setTagInput(e.target.value)}
                 onKeyDown={handleTagKeyDown}
-                placeholder={tags.length === 0 ? 'Type tag + Enter…' : ''}
-                className="flex-1 min-w-[80px] text-xs outline-none bg-transparent text-[var(--color-text-primary)] placeholder-[var(--color-text-secondary)]"
+                placeholder="Add tag…"
+                className="flex-1 px-3 py-2 md:py-1.5 text-xs border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-primary)] transition-all"
               />
+              <button
+                type="button"
+                onClick={handleTagAdd}
+                className="shrink-0 p-2 text-white bg-[var(--color-accent)] hover:opacity-90 rounded-lg transition-all touch-manipulation"
+                title="Add tag"
+              >
+                <Plus size={16} className="md:w-[14px] md:h-[14px]" />
+              </button>
             </div>
           </div>
 

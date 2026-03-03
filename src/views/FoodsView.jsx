@@ -3,7 +3,7 @@
 // Should not include: Daily meal management, settings.
 
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Search } from 'lucide-react';
+import { Plus, Search, X } from 'lucide-react';
 import { FoodCard } from '../components/FoodCard';
 import { DrinkCard } from '../components/DrinkCard';
 import { ItemForm } from '../components/ItemForm';
@@ -13,11 +13,11 @@ import { getAllFoods, getAllDrinks, deleteFood, deleteDrink, getDailyLog, saveDa
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 const getTodayDate = () => new Date().toISOString().split('T')[0];
-const generateId   = (p) => `${p}_${crypto.randomUUID().slice(0, 8)}`;
+const generateId = (p) => `${p}_${crypto.randomUUID().slice(0, 8)}`;
 
 const getMealTypeForTime = (time) => {
   const [h] = time.split(':').map(Number);
-  if (h >= 5  && h < 11) return 'Breakfast';
+  if (h >= 5 && h < 11) return 'Breakfast';
   if (h >= 11 && h < 16) return 'Lunch';
   if (h >= 16 && h < 22) return 'Dinner';
   return 'Snack';
@@ -25,33 +25,33 @@ const getMealTypeForTime = (time) => {
 
 const getCurrentTime = () => {
   const n = new Date();
-  return `${String(n.getHours()).padStart(2,'0')}:${String(n.getMinutes()).padStart(2,'0')}`;
+  return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`;
 };
 
 const buildDefaultMeals = () => [
   { id: generateId('meal'), type: 'Breakfast', time: '07:30', tags: [], notes: null, foods: [], drinks: [] },
-  { id: generateId('meal'), type: 'Lunch',     time: '13:00', tags: [], notes: null, foods: [], drinks: [] },
-  { id: generateId('meal'), type: 'Snack',     time: '16:00', tags: [], notes: null, foods: [], drinks: [] },
-  { id: generateId('meal'), type: 'Dinner',    time: '20:00', tags: [], notes: null, foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'Lunch', time: '13:00', tags: [], notes: null, foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'Snack', time: '16:00', tags: [], notes: null, foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'Dinner', time: '20:00', tags: [], notes: null, foods: [], drinks: [] },
 ];
 
 // ── Component ────────────────────────────────────────────────────────────────
 
 export function FoodsView() {
-  const [activeTab, setActiveTab]     = useState('foods');
+  const [activeTab, setActiveTab] = useState('foods');
   const [searchQuery, setSearchQuery] = useState('');
-  const [foods, setFoods]             = useState([]);
-  const [drinks, setDrinks]           = useState([]);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState(null);
+  const [foods, setFoods] = useState([]);
+  const [drinks, setDrinks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   // ItemForm state
-  const [showItemForm, setShowItemForm]     = useState(false);
-  const [editingItem, setEditingItem]       = useState(null);
-  const [itemFormType, setItemFormType]     = useState('food');
+  const [showItemForm, setShowItemForm] = useState(false);
+  const [editingItem, setEditingItem] = useState(null);
+  const [itemFormType, setItemFormType] = useState('food');
 
   // Quick-log modal state
-  const [quickLogItem, setQuickLogItem]           = useState(null); // { item, log, targetMeal }
+  const [quickLogItem, setQuickLogItem] = useState(null); // { item, log, targetMeal }
   const [quickLogMealLabel, setQuickLogMealLabel] = useState('');
 
   // ── Data loading ──────────────────────────────────────────────────────────
@@ -155,7 +155,7 @@ export function FoodsView() {
     const { log, targetMeal } = quickLogItem;
     const updatedMeal = entry.type === 'drink'
       ? { ...targetMeal, drinks: [...targetMeal.drinks, entry] }
-      : { ...targetMeal, foods:  [...targetMeal.foods,  entry] };
+      : { ...targetMeal, foods: [...targetMeal.foods, entry] };
     const updatedLog = {
       ...log,
       meals: log.meals.map(m => m.id === targetMeal.id ? updatedMeal : m),
@@ -184,32 +184,32 @@ export function FoodsView() {
     <div className="flex-1 flex flex-col min-h-0">
 
       {/* ── Sticky header (title + add button + tabs + search) ── */}
-      <div className="sticky top-0 z-10 bg-[var(--color-bg-secondary)] px-[var(--spacing-2xl)] pt-[var(--spacing-2xl)] pb-4 border-b border-[var(--color-border-primary)]">
+      <div className="sticky top-0 z-10 bg-[var(--color-bg-secondary)] px-4 md:px-6 lg:px-8 pt-4 md:pt-6 lg:pt-8 pb-3 md:pb-4 border-b border-[var(--color-border-primary)]">
 
         {/* Title row */}
-        <div className="flex items-center justify-between mb-4">
-          <h1 className="text-xl font-semibold text-[var(--color-text-primary)]">Library</h1>
+        <div className="flex items-center justify-between mb-3 md:mb-4">
+          <h1 className="text-lg md:text-xl font-semibold text-[var(--color-text-primary)]">Library</h1>
           <button
             onClick={() => openAdd(activeTab === 'drinks' ? 'drink' : 'food')}
-            className="flex items-center gap-1.5 px-4 py-2 text-sm font-semibold bg-[var(--color-accent)] text-white rounded-lg hover:opacity-90 transition-all"
+            className="flex items-center gap-1.5 px-3 md:px-4 py-2 md:py-2 text-sm font-semibold bg-[var(--color-accent)] text-white rounded-lg hover:opacity-90 transition-all touch-manipulation"
           >
-            <Plus size={15} />
-            Add {activeTab === 'drinks' ? 'Drink' : 'Food'}
+            <Plus size={16} className="md:w-[15px] md:h-[15px]" />
+            <span className="hidden sm:inline">Add {activeTab === 'drinks' ? 'Drink' : 'Food'}</span>
+            <span className="sm:hidden">Add</span>
           </button>
         </div>
 
         {/* Tabs + Search */}
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
           <div className="flex border-b border-[var(--color-border-primary)] shrink-0">
             {['foods', 'drinks'].map(tab => (
               <button
                 key={tab}
                 onClick={() => setActiveTab(tab)}
-                className={`pb-2 px-1 mr-4 text-sm font-medium capitalize transition-all border-b-2 -mb-px ${
-                  activeTab === tab
-                    ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
-                    : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
-                }`}
+                className={`pb-2 px-1 mr-4 text-sm font-medium capitalize transition-all border-b-2 -mb-px touch-manipulation ${activeTab === tab
+                  ? 'border-[var(--color-accent)] text-[var(--color-accent)]'
+                  : 'border-transparent text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)]'
+                  }`}
               >
                 {tab === 'foods' ? `Foods (${foods.length})` : `Drinks (${drinks.length})`}
               </button>
@@ -217,62 +217,71 @@ export function FoodsView() {
           </div>
 
           <div className="relative flex-1">
-            <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
+            <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)] pointer-events-none" />
             <input
               type="text"
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               placeholder={`Search ${activeTab}…`}
-              className="w-full pl-8 pr-4 py-1.5 text-sm border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-secondary)] transition-all"
+              className="w-full pl-9 md:pl-8 pr-9 py-2.5 md:py-2 text-sm border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-secondary)] transition-all"
             />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] hover:bg-[var(--color-hover-bg)] rounded transition-all touch-manipulation"
+                title="Clear search"
+              >
+                <X size={14} className="md:w-[13px] md:h-[13px]" />
+              </button>
+            )}
           </div>
         </div>
       </div>{/* end sticky header */}
 
       {/* ── Scrollable content ── */}
-      <div className="flex-1 overflow-y-auto p-[var(--spacing-2xl)]">
+      <div className="flex-1 overflow-y-auto p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
 
-      {/* ── Foods grid ── */}
-      {activeTab === 'foods' && (
-        filteredFoods.length === 0 ? (
-          <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
-            {searchQuery ? `No foods match "${searchQuery}"` : 'No custom foods yet. Add your first!'}
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-lg)]">
-            {filteredFoods.map(food => (
-              <FoodCard
-                key={food.id}
-                food={food}
-                onEdit={food.id.startsWith('g_') ? null : () => openEdit(food)}
-                onDelete={food.id.startsWith('g_') ? null : () => handleDeleteFood(food.id)}
-                onQuickLog={() => handleQuickLog(food)}
-              />
-            ))}
-          </div>
-        )
-      )}
+        {/* ── Foods grid ── */}
+        {activeTab === 'foods' && (
+          filteredFoods.length === 0 ? (
+            <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
+              {searchQuery ? `No foods match "${searchQuery}"` : 'No custom foods yet. Add your first!'}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+              {filteredFoods.map(food => (
+                <FoodCard
+                  key={food.id}
+                  food={food}
+                  onEdit={food.id.startsWith('g_') ? null : () => openEdit(food)}
+                  onDelete={food.id.startsWith('g_') ? null : () => handleDeleteFood(food.id)}
+                  onQuickLog={() => handleQuickLog(food)}
+                />
+              ))}
+            </div>
+          )
+        )}
 
-      {/* ── Drinks grid ── */}
-      {activeTab === 'drinks' && (
-        filteredDrinks.length === 0 ? (
-          <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
-            {searchQuery ? `No drinks match "${searchQuery}"` : 'No custom drinks yet. Add your first!'}
-          </p>
-        ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[var(--spacing-lg)]">
-            {filteredDrinks.map(drink => (
-              <DrinkCard
-                key={drink.id}
-                drink={drink}
-                onEdit={drink.id.startsWith('g_') ? null : () => openEdit(drink)}
-                onDelete={drink.id.startsWith('g_') ? null : () => handleDeleteDrink(drink.id)}
-                onQuickLog={() => handleQuickLog(drink)}
-              />
-            ))}
-          </div>
-        )
-      )}
+        {/* ── Drinks grid ── */}
+        {activeTab === 'drinks' && (
+          filteredDrinks.length === 0 ? (
+            <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
+              {searchQuery ? `No drinks match "${searchQuery}"` : 'No custom drinks yet. Add your first!'}
+            </p>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+              {filteredDrinks.map(drink => (
+                <DrinkCard
+                  key={drink.id}
+                  drink={drink}
+                  onEdit={drink.id.startsWith('g_') ? null : () => openEdit(drink)}
+                  onDelete={drink.id.startsWith('g_') ? null : () => handleDeleteDrink(drink.id)}
+                  onQuickLog={() => handleQuickLog(drink)}
+                />
+              ))}
+            </div>
+          )
+        )}
 
         {/* ── Item add/edit form ── */}
         {showItemForm && (

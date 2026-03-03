@@ -19,10 +19,10 @@ export function DrinkItem({ drink, onDelete }) {
       {onDelete && (
         <button
           onClick={onDelete}
-          className="shrink-0 p-0.5 opacity-0 group-hover:opacity-100 text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] rounded transition-all"
+          className="shrink-0 p-1 md:p-0.5 md:opacity-0 md:group-hover:opacity-100 text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] rounded transition-all touch-manipulation"
           title="Remove"
         >
-          <Trash2 size={11} />
+          <Trash2 size={15} className="md:w-[13px] md:h-[13px]" />
         </button>
       )}
     </div>

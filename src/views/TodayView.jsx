@@ -16,9 +16,9 @@ const getTodayDate = () => new Date().toISOString().split('T')[0];
 
 const DEFAULT_MEAL_TEMPLATES = [
   { type: 'Breakfast', time: '07:30' },
-  { type: 'Lunch',     time: '13:00' },
-  { type: 'Snack',     time: '16:00' },
-  { type: 'Dinner',    time: '20:00' },
+  { type: 'Lunch', time: '13:00' },
+  { type: 'Snack', time: '16:00' },
+  { type: 'Dinner', time: '20:00' },
 ];
 
 const buildDefaultMeals = () =>
@@ -36,9 +36,9 @@ const buildDefaultMeals = () =>
 
 export function TodayView() {
   const [currentDate, setCurrentDate] = useState(getTodayDate());
-  const [dailyLog, setDailyLog]       = useState(null);
-  const [loading, setLoading]         = useState(true);
-  const [error, setError]             = useState(null);
+  const [dailyLog, setDailyLog] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [editingMeal, setEditingMeal] = useState(null);
 
   // ── Load ──────────────────────────────────────────────────────────────────
@@ -87,8 +87,8 @@ export function TodayView() {
   // ── Day-level handlers ────────────────────────────────────────────────────
 
   const handleNotesChange = (dayNotes) => persist({ ...dailyLog, dayNotes });
-  const handleTagAdd      = (tag) => persist({ ...dailyLog, tags: [...dailyLog.tags, tag] });
-  const handleTagRemove   = (tag) => persist({ ...dailyLog, tags: dailyLog.tags.filter(t => t !== tag) });
+  const handleTagAdd = (tag) => persist({ ...dailyLog, tags: [...dailyLog.tags, tag] });
+  const handleTagRemove = (tag) => persist({ ...dailyLog, tags: dailyLog.tags.filter(t => t !== tag) });
 
   // ── Meal handlers ─────────────────────────────────────────────────────────
 
@@ -129,7 +129,7 @@ export function TodayView() {
   );
 
   return (
-    <div className="flex-1 p-[var(--spacing-2xl)]">
+    <div className="flex-1 p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
 
       {/* Compact date + tags + notes header */}
       <DayHeader
@@ -142,8 +142,8 @@ export function TodayView() {
         onTagRemove={handleTagRemove}
       />
 
-      {/* Meal cards — items-start prevents height sync between cards in same row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-[var(--spacing-lg)] items-start">
+      {/* Meal cards — responsive grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 items-start">
         {dailyLog.meals.map(meal => (
           <MealCard
             key={meal.id}
@@ -157,10 +157,12 @@ export function TodayView() {
         {/* Add custom meal */}
         <button
           onClick={() => setEditingMeal({})}
-          className="flex items-center justify-center gap-2 py-4 text-sm text-[var(--color-text-secondary)] border border-dashed border-[var(--color-border-primary)] rounded-[var(--radius-md)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors"
+          className="bg-[var(--color-bg-primary)] border border-dashed border-[var(--color-border-primary)] rounded-[var(--radius-md)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors overflow-hidden"
         >
-          <Plus size={15} />
-          Add custom meal
+          <div className="flex items-center justify-center gap-2 p-[var(--spacing-card-padding)]">
+            <Plus size={16} className="md:w-[14px] md:h-[14px]" />
+            <span className="text-sm font-semibold text-[var(--color-text-primary)]">Add custom meal</span>
+          </div>
         </button>
       </div>
 

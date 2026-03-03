@@ -10,7 +10,7 @@ const formatLastUsed = (dateString) => {
   const diffDays = Math.floor((new Date() - date) / 86400000);
   if (diffDays === 0) return 'Today';
   if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7)  return `${diffDays}d ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
   if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
   return date.toLocaleDateString();
 };
@@ -38,21 +38,15 @@ export function DrinkCard({ drink, onEdit, onDelete, onQuickLog }) {
             <span className="text-[10px] text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded-sm">Global</span>
           )}
         </div>
-        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity ml-2 shrink-0">
-          {/* Quick log */}
-          {onQuickLog && (
-            <button
-              onClick={onQuickLog}
-              className="p-1 text-white bg-[var(--color-accent)] hover:opacity-80 rounded transition-all"
-              title="Log to today"
-            >
-              <Plus size={13} />
-            </button>
-          )}
+        <div className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity ml-2 shrink-0">
           {/* Edit */}
           {onEdit && (
-            <button onClick={onEdit} className="p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] rounded transition-colors" title="Edit">
-              <Pencil size={13} />
+            <button
+              onClick={onEdit}
+              className="p-1.5 md:p-1 text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] rounded transition-colors touch-manipulation"
+              title="Edit"
+            >
+              <Pencil size={15} className="md:w-[13px] md:h-[13px]" />
             </button>
           )}
           {/* Delete — 2-step */}
@@ -60,14 +54,23 @@ export function DrinkCard({ drink, onEdit, onDelete, onQuickLog }) {
             <button
               onClick={handleDeleteClick}
               onBlur={() => setConfirmDelete(false)}
-              className={`flex items-center gap-0.5 px-1.5 py-1 rounded text-xs font-medium transition-colors ${
-                confirmDelete
-                  ? 'bg-[var(--color-danger)] text-white'
-                  : 'text-[var(--color-text-secondary)] hover:text-[var(--color-danger)]'
-              }`}
+              className={`flex items-center gap-0.5 px-2 md:px-1.5 py-1.5 md:py-1 rounded text-xs font-medium transition-colors touch-manipulation ${confirmDelete
+                ? 'bg-[var(--color-danger)] text-white'
+                : 'text-[var(--color-text-secondary)] hover:text-[var(--color-danger)]'
+                }`}
               title={confirmDelete ? 'Click again to confirm' : 'Delete'}
             >
-              {confirmDelete ? <><AlertCircle size={11} /> Del?</> : <Trash2 size={13} />}
+              {confirmDelete ? <><AlertCircle size={15} className="md:w-[13px] md:h-[13px]" /> <span className="hidden md:inline">Del?</span></> : <Trash2 size={15} className="md:w-[13px] md:h-[13px]" />}
+            </button>
+          )}
+          {/* Quick log */}
+          {onQuickLog && (
+            <button
+              onClick={onQuickLog}
+              className="p-1.5 md:p-1 text-white bg-[var(--color-accent)] hover:opacity-80 rounded transition-all touch-manipulation"
+              title="Log to today"
+            >
+              <Plus size={15} className="md:w-[13px] md:h-[13px]" />
             </button>
           )}
         </div>
