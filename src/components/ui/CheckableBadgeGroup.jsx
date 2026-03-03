@@ -1,5 +1,5 @@
-// File purpose: Multi-select badge group with "Show all" modal for ingredients/extras
-// Related: Used in FoodForm for ingredients and extras selection
+// File purpose: Multi-select badge group with "Show all" modal
+// Related: Used in forms for multi-select functionality
 // Should not include: Single-select logic or complex filtering beyond search
 
 import { useState } from 'react';
@@ -16,10 +16,10 @@ import { X, Search } from 'lucide-react';
  * @param {string} [props.label] - Optional label text
  * @param {string} [props.className] - Additional classes
  */
-export function CheckableBadgeGroup({ 
-  items, 
-  selectedIds, 
-  onChange, 
+export function CheckableBadgeGroup({
+  items,
+  selectedIds,
+  onChange,
   onAddNew,
   topCount = 8,
   label,
@@ -36,9 +36,9 @@ export function CheckableBadgeGroup({
 
   // Filter items based on search
   const filteredItems = searchQuery
-    ? items.filter(item => 
-        item.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
+    ? items.filter(item =>
+      item.name.toLowerCase().includes(searchQuery.toLowerCase())
+    )
     : items;
 
   // Toggle selection
@@ -65,7 +65,7 @@ export function CheckableBadgeGroup({
           {label}
         </label>
       )}
-      
+
       {/* Top items as badges */}
       <div className="flex flex-wrap gap-2 mb-2">
         {topItems.map(item => {
@@ -77,8 +77,8 @@ export function CheckableBadgeGroup({
               onClick={() => toggleItem(item.id)}
               className={`
                 px-2.5 py-1 rounded-full text-xs font-medium transition-colors whitespace-nowrap
-                ${isSelected 
-                  ? 'bg-[var(--color-accent)] text-white' 
+                ${isSelected
+                  ? 'bg-[var(--color-accent)] text-white'
                   : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] border border-[var(--color-border-primary)] hover:bg-[var(--color-hover-bg)] hover:border-[var(--color-border-secondary)]'
                 }
               `}
@@ -117,9 +117,9 @@ export function CheckableBadgeGroup({
             {/* Search bar */}
             <div className="p-4 border-b border-[var(--color-border-primary)]">
               <div className="relative">
-                <Search 
-                  size={16} 
-                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-text-secondary)]" 
+                <Search
+                  size={16}
+                  className="absolute left-3 top-1/2 transform -translate-y-1/2 text-[var(--color-text-secondary)]"
                 />
                 <input
                   type="text"
@@ -143,8 +143,8 @@ export function CheckableBadgeGroup({
                       onClick={() => toggleItem(item.id)}
                       className={`
                         px-2.5 py-1 rounded-full text-xs font-medium transition-colors whitespace-nowrap
-                        ${isSelected 
-                          ? 'bg-[var(--color-accent)] text-white' 
+                        ${isSelected
+                          ? 'bg-[var(--color-accent)] text-white'
                           : 'bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] border border-[var(--color-border-primary)] hover:bg-[var(--color-hover-bg)] hover:border-[var(--color-border-secondary)]'
                         }
                       `}

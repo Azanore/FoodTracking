@@ -152,6 +152,9 @@ export function FoodsView() {
   };
 
   const openEdit = (item) => {
+    // Cannot edit global items
+    if (item.id && item.id.startsWith('g_')) return;
+
     setEditingItem(item);
     setItemFormType(item.type ?? (item.category ? 'drink' : 'food'));
     setShowItemForm(true);
@@ -332,8 +335,8 @@ export function FoodsView() {
                 <FoodCard
                   key={food.id}
                   food={food}
-                  onEdit={food.id.startsWith('g_') ? null : () => openEdit(food)}
-                  onDelete={food.id.startsWith('g_') ? null : () => handleDeleteFood(food.id)}
+                  onEdit={() => openEdit(food)}
+                  onDelete={() => handleDeleteFood(food.id)}
                   onQuickLog={() => handleQuickLog(food)}
                   onTagClick={(tag) => setActiveTag(tag)}
                 />
@@ -354,8 +357,8 @@ export function FoodsView() {
                 <DrinkCard
                   key={drink.id}
                   drink={drink}
-                  onEdit={drink.id.startsWith('g_') ? null : () => openEdit(drink)}
-                  onDelete={drink.id.startsWith('g_') ? null : () => handleDeleteDrink(drink.id)}
+                  onEdit={() => openEdit(drink)}
+                  onDelete={() => handleDeleteDrink(drink.id)}
                   onQuickLog={() => handleQuickLog(drink)}
                   onTagClick={(tag) => setActiveTag(tag)}
                 />

@@ -1,4 +1,4 @@
-// File purpose: Load seed data into database on first launch
+// File purpose: Load seed data into database on first launch or reset
 // Related: src/data/seedData.json, src/services/db.js
 // Should not include: Business logic, UI components
 
@@ -13,16 +13,7 @@ export const isSeeded = () => {
 
 // Load all seed data into localStorage
 export const seedDatabase = () => {
-  if (isSeeded()) {
-    return;
-  }
-
   try {
-    // Seed ingredients
-    seedData.ingredients.forEach(ingredient => {
-      localStorage.setItem(ingredient.id, JSON.stringify(ingredient));
-    });
-
     // Seed user foods
     seedData.userFoods.forEach(food => {
       localStorage.setItem(food.id, JSON.stringify(food));
@@ -33,14 +24,6 @@ export const seedDatabase = () => {
       localStorage.setItem(drink.id, JSON.stringify(drink));
     });
 
-    // Seed daily logs
-    seedData.dailyLogs.forEach(log => {
-      localStorage.setItem(`day_${log.date}`, JSON.stringify(log));
-    });
-
-    // Seed user preferences
-    localStorage.setItem('user_preferences', JSON.stringify(seedData.userPreferences));
-
     // Mark as seeded
     localStorage.setItem(SEED_FLAG_KEY, 'true');
   } catch (error) {
@@ -48,7 +31,7 @@ export const seedDatabase = () => {
   }
 };
 
-// Clear all data and reseed (for testing)
+// Clear all data and reseed
 export const resetDatabase = () => {
   localStorage.clear();
   seedDatabase();

@@ -17,7 +17,6 @@ const formatLastUsed = (dateString) => {
 
 export function FoodCard({ food, onEdit, onDelete, onQuickLog, onTagClick }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const isGlobal = food.id.startsWith('g_');
 
   const handleDeleteClick = () => {
     if (confirmDelete) { onDelete(); setConfirmDelete(false); }
@@ -34,9 +33,6 @@ export function FoodCard({ food, onEdit, onDelete, onQuickLog, onTagClick }) {
       <div className="flex items-start justify-between mb-2">
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-semibold text-[var(--color-text-primary)] truncate">{food.name}</h3>
-          {isGlobal && (
-            <span className="text-[10px] text-[var(--color-text-secondary)] bg-[var(--color-bg-secondary)] px-1.5 py-0.5 rounded-sm">Global</span>
-          )}
         </div>
         <div className="flex items-center gap-1 md:opacity-0 md:group-hover:opacity-100 transition-opacity ml-2 shrink-0">
           {/* Edit */}

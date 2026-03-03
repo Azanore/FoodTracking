@@ -22,32 +22,30 @@ A **food diary/journal** for tracking eating patterns and habits — NOT a nutri
 
 **Working features:**
 - Daily meal logging (Today view)
-- Food/drink library with global + custom items
-- Tag system (day/meal/food/drink)
-- Search, filter, and sort library
+- Food/drink library with deletable global + custom items
+- Tag system (day/meal/food/drink) with click-to-filter
+- Search, filter by tag, and sort library (name/usage/recent)
 - Quick-log from library to today
 - Usage tracking (count + last used)
 - Collapsible meal cards
 - 2-step delete confirmation
+- Data export/import (JSON backup/restore)
+- Reset all data (with export prompt + confirmation)
 - Responsive design (mobile + desktop)
+- Consistent UI/UX across all views
 
 ---
 
 ## Next Priorities
 
-### 1. Data Export/Import (High Priority)
-- Export all data as JSON (backup)
-- Import JSON to restore data
-- Simple button in Settings view
-
-### 2. Stats View (High Priority)
+### 1. Stats View (High Priority)
 - Overview: total days logged, meals, unique items
 - Top 10 foods/drinks by usage
 - Tag frequency analysis
 - Date range selection (last 7/30 days, all time)
 - Simple charts (bar/line)
 
-### 3. Historical Data Loading
+### 2. Historical Data Loading
 - Query multiple daily logs from localStorage
 - Aggregation helpers for stats
 - Date range picker for navigation
@@ -89,3 +87,4 @@ A **food diary/journal** for tracking eating patterns and habits — NOT a nutri
 ---
 
 **Last Updated:** 2026-03-03
+**Status:** Data management complete, ready for Stats view implementation
