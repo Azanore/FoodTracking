@@ -16,25 +16,14 @@ const MEAL_ICONS = {
 };
 
 /**
- * MealCard
- *
- * Key UX decisions:
- * - Summary line always visible (collapsed or expanded) — no layout shift.
- * - + Add button on header row — no need to expand first.
- * - Delete requires 2 clicks (click trash → confirm appears inline; click again → deletes).
- * - Food/DrinkItem no longer have an edit button — delete + re-add is faster.
- *
- * @param {Object}   props.meal         Meal data
- * @param {Function} props.onEdit       Open MealForm to edit metadata
- * @param {Function} props.onDelete     Delete this meal
- * @param {Function} props.onMealUpdate Update meal items
+ * MealCard - displays a meal event from the timeline
  */
 export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
-  const MealIcon = MEAL_ICONS[meal.type] || Cookie;
+  const MealIcon = MEAL_ICONS[meal.mealType] || Cookie;
   const itemCount = meal.foods.length + meal.drinks.length;
   const summaryItems = [
     ...meal.foods.map(f => f.name),
@@ -44,7 +33,7 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
     ? summaryItems.slice(0, 4).join(', ') + (summaryItems.length > 4 ? `…` : '')
     : 'Nothing logged yet';
 
-  const mealLabel = `${meal.type} · ${meal.time}`;
+  const mealLabel = `${meal.mealType} · ${meal.time}`;
 
   const handleLogSave = (entry) => {
     const updatedMeal = entry.type === 'drink'
@@ -80,7 +69,7 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex items-baseline gap-1.5 leading-none mb-1 md:mb-0.5">
-              <span className="text-sm md:text-sm font-semibold text-[var(--color-text-primary)]">{meal.type}</span>
+              <span className="text-sm md:text-sm font-semibold text-[var(--color-text-primary)]">{meal.mealType}</span>
               <span className="text-xs text-[var(--color-text-secondary)]">{meal.time}</span>
             </div>
             {/* Summary — always visible regardless of expand state */}
@@ -182,11 +171,6 @@ export function MealCard({ meal, onEdit, onDelete, onMealUpdate }) {
             >
               + log something here
             </button>
-          )}
-
-          {/* Meal notes */}
-          {meal.notes && (
-            <p className="text-xs text-[var(--color-text-secondary)] italic px-1 mt-2 md:mt-1">{meal.notes}</p>
           )}
         </div>
       )}

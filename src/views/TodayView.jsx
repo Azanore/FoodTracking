@@ -1,12 +1,14 @@
-// File purpose: Daily food log view — smart auto-initialised meals, compact header.
-// Related: App.jsx renders this, MealCard.jsx per meal, MealForm.jsx for editing meal metadata.
+// File purpose: Timeline view — meals and feelings displayed chronologically.
+// Related: App.jsx renders this, MealCard/FeelingCard for events, MealForm/FeelingModal for logging.
 // Should not include: Food library, settings.
 
 import { useState, useEffect } from 'react';
 import { Plus } from 'lucide-react';
 import { DayHeader } from '../components/DayHeader';
 import { MealCard } from '../components/MealCard';
+import { FeelingCard } from '../components/FeelingCard';
 import { MealForm } from '../components/MealForm';
+import { FeelingModal } from '../components/FeelingModal';
 import { getDailyLog, saveDailyLog } from '../services/db';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -21,13 +23,14 @@ const DEFAULT_MEAL_TEMPLATES = [
   { type: 'Dinner', time: '20:00' },
 ];
 
-const buildDefaultMeals = () =>
+// Build default timeline with meal events
+const buildDefaultTimeline = () =>
   DEFAULT_MEAL_TEMPLATES.map(t => ({
     id: generateId('meal'),
-    type: t.type,
+    type: 'meal',
     time: t.time,
+    mealType: t.type,
     tags: [],
-    notes: null,
     foods: [],
     drinks: [],
   }));
@@ -40,6 +43,7 @@ export function TodayView() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingMeal, setEditingMeal] = useState(null);
+  const [showFeelingModal, setShowFeelingModal] = useState(false);
 
   // ── Load ──────────────────────────────────────────────────────────────────
 
@@ -54,13 +58,14 @@ export function TodayView() {
             id: generateId('day'),
             date: currentDate,
             tags: [],
-            dayNotes: null,
-            meals: buildDefaultMeals(),
+            timeline: buildDefaultTimeline(),
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString(),
           };
         } else {
-          if (!log.meals) log.meals = buildDefaultMeals();
+          if (!log.timeline || log.timeline.length === 0) {
+            log.timeline = buildDefaultTimeline();
+          }
         }
         setDailyLog(log);
       } catch (err) {
@@ -86,32 +91,49 @@ export function TodayView() {
 
   // ── Day-level handlers ────────────────────────────────────────────────────
 
-  const handleNotesChange = (dayNotes) => persist({ ...dailyLog, dayNotes });
   const handleTagAdd = (tag) => persist({ ...dailyLog, tags: [...dailyLog.tags, tag] });
   const handleTagRemove = (tag) => persist({ ...dailyLog, tags: dailyLog.tags.filter(t => t !== tag) });
 
   // ── Meal handlers ─────────────────────────────────────────────────────────
 
   const handleMealUpdate = (updatedMeal) => {
-    const meals = dailyLog.meals.map(m => m.id === updatedMeal.id ? updatedMeal : m);
-    persist({ ...dailyLog, meals });
+    const timeline = dailyLog.timeline.map(evt => evt.id === updatedMeal.id ? updatedMeal : evt);
+    persist({ ...dailyLog, timeline });
   };
 
   const handleMealDelete = (mealId) => {
-    const meals = dailyLog.meals.filter(m => m.id !== mealId);
-    persist({ ...dailyLog, meals });
+    const timeline = dailyLog.timeline.filter(evt => evt.id !== mealId);
+    persist({ ...dailyLog, timeline });
   };
 
   const handleMealFormSave = (mealData) => {
-    let meals;
-    if (dailyLog.meals.find(m => m.id === mealData.id)) {
-      meals = dailyLog.meals.map(m => m.id === mealData.id ? mealData : m);
+    let timeline;
+    if (dailyLog.timeline.find(evt => evt.id === mealData.id)) {
+      timeline = dailyLog.timeline.map(evt => evt.id === mealData.id ? mealData : evt);
     } else {
-      meals = [...dailyLog.meals, mealData];
+      timeline = [...dailyLog.timeline, mealData];
     }
-    meals.sort((a, b) => a.time.localeCompare(b.time));
-    persist({ ...dailyLog, meals });
+    timeline.sort((a, b) => a.time.localeCompare(b.time));
+    persist({ ...dailyLog, timeline });
     setEditingMeal(null);
+  };
+
+  // ── Feeling handlers ──────────────────────────────────────────────────────
+
+  const handleFeelingSave = (feelingData) => {
+    const timeline = [...dailyLog.timeline, feelingData];
+    // Sort by time (feelings with specific time, then meals, then time-of-day feelings)
+    timeline.sort((a, b) => {
+      const aTime = a.time || '23:59';
+      const bTime = b.time || '23:59';
+      return aTime.localeCompare(bTime);
+    });
+    persist({ ...dailyLog, timeline });
+  };
+
+  const handleFeelingDelete = (feelingId) => {
+    const timeline = dailyLog.timeline.filter(evt => evt.id !== feelingId);
+    persist({ ...dailyLog, timeline });
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -131,39 +153,58 @@ export function TodayView() {
   return (
     <div className="flex-1 p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
 
-      {/* Compact date + tags + notes header */}
+      {/* Compact date + tags header */}
       <DayHeader
         currentDate={currentDate}
         onDateChange={setCurrentDate}
-        dayNotes={dailyLog.dayNotes}
         tags={dailyLog.tags}
-        onNotesChange={handleNotesChange}
         onTagAdd={handleTagAdd}
         onTagRemove={handleTagRemove}
       />
 
-      {/* Meal cards — responsive grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 items-start">
-        {dailyLog.meals.map(meal => (
-          <MealCard
-            key={meal.id}
-            meal={meal}
-            onEdit={setEditingMeal}
-            onDelete={handleMealDelete}
-            onMealUpdate={handleMealUpdate}
-          />
-        ))}
-
-        {/* Add custom meal */}
+      {/* Action buttons */}
+      <div className="flex gap-3 mb-5">
         <button
           onClick={() => setEditingMeal({})}
-          className="bg-[var(--color-bg-primary)] border border-dashed border-[var(--color-border-primary)] rounded-[var(--radius-md)] hover:border-[var(--color-accent)] hover:text-[var(--color-accent)] transition-colors overflow-hidden"
+          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold bg-[var(--color-accent)] text-white rounded-lg hover:opacity-90 transition-all touch-manipulation"
         >
-          <div className="flex items-center justify-center gap-2 p-[var(--spacing-card-padding)]">
-            <Plus size={16} className="md:w-[14px] md:h-[14px]" />
-            <span className="text-sm font-semibold text-[var(--color-text-primary)]">Add custom meal</span>
-          </div>
+          <Plus size={16} />
+          Log Meal
         </button>
+        <button
+          onClick={() => setShowFeelingModal(true)}
+          className="flex items-center gap-2 px-4 py-2.5 text-sm font-semibold border border-[var(--color-accent)] text-[var(--color-accent)] rounded-lg hover:bg-[var(--color-accent)]/10 transition-all touch-manipulation"
+        >
+          <Plus size={16} />
+          Log Feeling
+        </button>
+      </div>
+
+      {/* Timeline — responsive grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 items-start">
+        {dailyLog.timeline.map(evt => {
+          if (evt.type === 'meal') {
+            return (
+              <MealCard
+                key={evt.id}
+                meal={evt}
+                onEdit={setEditingMeal}
+                onDelete={handleMealDelete}
+                onMealUpdate={handleMealUpdate}
+              />
+            );
+          }
+          if (evt.type === 'feeling') {
+            return (
+              <FeelingCard
+                key={evt.id}
+                feeling={evt}
+                onDelete={handleFeelingDelete}
+              />
+            );
+          }
+          return null;
+        })}
       </div>
 
       {/* Meal edit / create form */}
@@ -174,6 +215,14 @@ export function TodayView() {
           onCancel={() => setEditingMeal(null)}
         />
       )}
+
+      {/* Feeling modal */}
+      <FeelingModal
+        isOpen={showFeelingModal}
+        onClose={() => setShowFeelingModal(false)}
+        onSave={handleFeelingSave}
+        meals={dailyLog.timeline.filter(evt => evt.type === 'meal')}
+      />
     </div>
   );
 }

@@ -34,11 +34,10 @@ const suggestMealType = (time) => {
 export function MealForm({ meal, onSave, onCancel }) {
   const isEditing = !!meal;
 
-  const [mealType, setMealType] = useState(meal?.type || '');
+  const [mealType, setMealType] = useState(meal?.mealType || '');
   const [time, setTime] = useState(meal?.time || getCurrentTime());
   const [tags, setTags] = useState(meal?.tags || []);
   const [tagInput, setTagInput] = useState('');
-  const [notes, setNotes] = useState(meal?.notes || '');
   const [error, setError] = useState('');
   const tagInputRef = useRef(null);
 
@@ -86,10 +85,10 @@ export function MealForm({ meal, onSave, onCancel }) {
 
     onSave({
       id: meal?.id || `meal_${crypto.randomUUID().slice(0, 8)}`,
-      type: mealType,
+      type: 'meal',
       time,
+      mealType,
       tags,
-      notes: notes.trim() || null,
       foods: meal?.foods || [],
       drinks: meal?.drinks || [],
     });
@@ -209,20 +208,6 @@ export function MealForm({ meal, onSave, onCancel }) {
                 <Plus size={16} className="md:w-[14px] md:h-[14px]" />
               </button>
             </div>
-          </div>
-
-          {/* ── Notes ── */}
-          <div>
-            <label className="block text-xs font-semibold mb-1.5 text-[var(--color-text-secondary)] uppercase tracking-wide">
-              Notes <span className="normal-case font-normal opacity-70">(optional)</span>
-            </label>
-            <textarea
-              value={notes}
-              onChange={e => setNotes(e.target.value)}
-              placeholder="Any notes about this meal…"
-              rows={2}
-              className="w-full px-3 py-2 border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none text-sm resize-none bg-[var(--color-bg-primary)] transition-all"
-            />
           </div>
 
           {/* ── Error ── */}

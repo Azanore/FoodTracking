@@ -29,10 +29,10 @@ const getCurrentTime = () => {
 };
 
 const buildDefaultMeals = () => [
-  { id: generateId('meal'), type: 'Breakfast', time: '07:30', tags: [], notes: null, foods: [], drinks: [] },
-  { id: generateId('meal'), type: 'Lunch', time: '13:00', tags: [], notes: null, foods: [], drinks: [] },
-  { id: generateId('meal'), type: 'Snack', time: '16:00', tags: [], notes: null, foods: [], drinks: [] },
-  { id: generateId('meal'), type: 'Dinner', time: '20:00', tags: [], notes: null, foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'meal', mealType: 'Breakfast', time: '07:30', tags: [], foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'meal', mealType: 'Lunch', time: '13:00', tags: [], foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'meal', mealType: 'Snack', time: '16:00', tags: [], foods: [], drinks: [] },
+  { id: generateId('meal'), type: 'meal', mealType: 'Dinner', time: '20:00', tags: [], foods: [], drinks: [] },
 ];
 
 // ── Component ────────────────────────────────────────────────────────────────
@@ -187,21 +187,22 @@ export function FoodsView() {
     if (!log) {
       log = {
         id: generateId('day'), date,
-        tags: [], dayNotes: null,
-        meals: buildDefaultMeals(),
+        tags: [],
+        timeline: buildDefaultMeals(),
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
       await saveDailyLog(log);
-    } else if (!log.meals) {
-      log.meals = buildDefaultMeals();
+    } else if (!log.timeline || log.timeline.length === 0) {
+      log.timeline = buildDefaultMeals();
     }
 
     const time = getCurrentTime();
     const targetType = getMealTypeForTime(time);
-    const targetMeal = log.meals.find(m => m.type === targetType) ?? log.meals[0];
+    const targetMeal = log.timeline.find(evt => evt.type === 'meal' && evt.mealType === targetType)
+      ?? log.timeline.find(evt => evt.type === 'meal');
 
-    setQuickLogMealLabel(`${targetMeal.type} · ${targetMeal.time}`);
+    setQuickLogMealLabel(`${targetMeal.mealType} · ${targetMeal.time}`);
     setQuickLogItem({ item, log, targetMeal });
   };
 
@@ -213,7 +214,7 @@ export function FoodsView() {
       : { ...targetMeal, foods: [...targetMeal.foods, entry] };
     const updatedLog = {
       ...log,
-      meals: log.meals.map(m => m.id === targetMeal.id ? updatedMeal : m),
+      timeline: log.timeline.map(evt => evt.id === targetMeal.id ? updatedMeal : evt),
       updatedAt: new Date().toISOString(),
     };
     await saveDailyLog(updatedLog);

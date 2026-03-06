@@ -12,11 +12,43 @@ const now = () => new Date().toISOString();
 // Daily Logs
 // ============================================================================
 
+// Migrate old meal-based structure to timeline structure
+const migrateToTimeline = (log) => {
+  // Already migrated
+  if (log.timeline) return log;
+
+  // Convert meals array to timeline events
+  const timeline = (log.meals || []).map(meal => ({
+    id: meal.id,
+    type: 'meal',
+    time: meal.time,
+    mealType: meal.type,
+    foods: meal.foods || [],
+    drinks: meal.drinks || [],
+    tags: meal.tags || []
+  }));
+
+  // Sort by time
+  timeline.sort((a, b) => a.time.localeCompare(b.time));
+
+  return {
+    id: log.id,
+    date: log.date,
+    tags: log.tags || [],
+    timeline,
+    createdAt: log.createdAt,
+    updatedAt: log.updatedAt
+  };
+};
+
 export const getDailyLog = async (date) => {
   try {
     const key = `day_${date}`;
     const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : null;
+    if (!data) return null;
+
+    const log = JSON.parse(data);
+    return migrateToTimeline(log);
   } catch (error) {
     console.error('Failed to get daily log:', error);
     throw new Error('Failed to load daily log');

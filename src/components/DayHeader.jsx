@@ -1,9 +1,9 @@
-// File purpose: Day header with date navigation, tags, and notes.
+// File purpose: Day header with date navigation and tags.
 // Related: TodayView.jsx renders this at the top of the page.
 // Should not include: Meal management, food library.
 
 import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, StickyNote, X, Tag, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Tag, Plus } from 'lucide-react';
 
 // Format date as "Tuesday, March 3"
 const formatDate = (dateStr) => {
@@ -13,20 +13,13 @@ const formatDate = (dateStr) => {
 
 const formatYear = (dateStr) => new Date(dateStr + 'T00:00:00').getFullYear();
 
-/**
- * DayHeader – single compact row: ← date → | tags | notes toggle
- * Replaces the old DateNavigation + DayMeta combo.
- */
-export function DayHeader({ currentDate, onDateChange, dayNotes, tags, onNotesChange, onTagAdd, onTagRemove }) {
-  const [showNotes, setShowNotes] = useState(false);
+// DayHeader – date navigation + day-level tags
+export function DayHeader({ currentDate, onDateChange, tags, onTagAdd, onTagRemove }) {
   const [showTagInput, setShowTagInput] = useState(false);
-  const notesRef = useRef(null);
   const tagRef = useRef(null);
   const today = new Date().toISOString().split('T')[0];
   const isToday = currentDate === today;
 
-  // Auto-focus note textarea when opened
-  useEffect(() => { if (showNotes) notesRef.current?.focus(); }, [showNotes]);
   useEffect(() => { if (showTagInput) tagRef.current?.focus(); }, [showTagInput]);
 
   const navigate = (delta) => {
@@ -105,18 +98,6 @@ export function DayHeader({ currentDate, onDateChange, dayNotes, tags, onNotesCh
         >
           <Tag size={16} className="md:w-[15px] md:h-[15px]" />
         </button>
-
-        {/* Notes toggle */}
-        <button
-          onClick={() => setShowNotes(v => !v)}
-          title={dayNotes ? 'Edit day notes' : 'Add day notes'}
-          className={`p-2 md:p-1.5 rounded-lg transition-colors relative shrink-0 touch-manipulation ${showNotes ? 'bg-[var(--color-accent)]/10 text-[var(--color-accent)]' : 'hover:bg-[var(--color-hover-bg)] text-[var(--color-text-secondary)]'}`}
-        >
-          <StickyNote size={16} className="md:w-[15px] md:h-[15px]" />
-          {dayNotes && !showNotes && (
-            <span className="absolute top-1 right-1 w-1.5 h-1.5 bg-[var(--color-accent)] rounded-full" />
-          )}
-        </button>
       </div>
 
       {/* Tag pills row (mobile: below date, desktop: inline would be too cramped) */}
@@ -166,20 +147,6 @@ export function DayHeader({ currentDate, onDateChange, dayNotes, tags, onNotesCh
           >
             <X size={16} className="md:w-[14px] md:h-[14px]" />
           </button>
-        </div>
-      )}
-
-      {/* ── Notes panel (slides in) ── */}
-      {showNotes && (
-        <div className="mt-2">
-          <textarea
-            ref={notesRef}
-            value={dayNotes || ''}
-            onChange={e => onNotesChange(e.target.value)}
-            placeholder="Add notes about your day…"
-            rows={2}
-            className="w-full px-3 py-2 text-sm border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none resize-none bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] transition-all"
-          />
         </div>
       )}
     </div>
