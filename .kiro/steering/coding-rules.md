@@ -81,6 +81,34 @@ inclusion: always
 - Mention what can be refactored (e.g., "X and Y can be refactored")
 - Send all commands at the end as text, not mid-coding
 
+## Critical Thinking & Challenge
+
+**Never Accept Blindly**: Analyze, investigate, critique, and reason about every request and idea.
+- Question assumptions and proposed solutions
+- Evaluate against: UX simplicity, flexibility, usability, feature value, scope creep, complexity
+- Propose alternatives if the request has issues
+- Push back when something adds unnecessary complexity or doesn't serve users
+
+**Priority Order** (highest to lowest):
+1. **User Experience** - Simplicity, usability, intuitive flow
+2. **Feature Value** - Does it solve a real problem? Is it meaningful?
+3. **Scope Control** - Does it fit the vision? Is it scope creep?
+4. **Implementation Complexity** - Effort vs. value ratio
+5. **Flexibility** - Can it adapt to future needs without over-engineering?
+
+**When to Push Back**:
+- Feature doesn't align with core value proposition
+- Adds complexity without proportional user benefit
+- Creates maintenance burden for edge cases
+- Better alternative exists that's simpler or more effective
+- Request conflicts with established design decisions
+
+**How to Challenge**:
+- Present analysis with clear reasoning
+- Offer alternatives with trade-offs
+- Explain impact on UX, scope, and complexity
+- Recommend the optimal path (may differ from request)
+
 ## Decision Making
 
 **When Asked for Tasks**:

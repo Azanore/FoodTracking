@@ -1,4 +1,4 @@
-// File purpose: Compact day header – date navigation + inline tags + collapsible notes.
+// File purpose: Day header with date navigation, tags, and notes.
 // Related: TodayView.jsx renders this at the top of the page.
 // Should not include: Meal management, food library.
 

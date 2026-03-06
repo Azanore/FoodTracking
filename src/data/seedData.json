@@ -5,7 +5,6 @@
       "name": "Chicken Tagine",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "stewed",
       "tags": [
         "traditional",
@@ -19,7 +18,6 @@
       "name": "Couscous",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "steamed",
       "tags": [
         "traditional",
@@ -33,7 +31,6 @@
       "name": "Harira",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "medium",
       "defaultCookingMethod": "stewed",
       "tags": [
         "soup",
@@ -47,7 +44,6 @@
       "name": "Msemen",
       "defaultQuantity": 2,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "fried",
       "tags": [
         "breakfast-staple",
@@ -61,7 +57,6 @@
       "name": "Khobz",
       "defaultQuantity": 2,
       "defaultUnit": "slices",
-      "defaultPortion": null,
       "defaultCookingMethod": "baked",
       "tags": [
         "bread",
@@ -75,7 +70,6 @@
       "name": "Zaalouk",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "small",
       "defaultCookingMethod": "sauteed",
       "tags": [
         "salad",
@@ -89,7 +83,6 @@
       "name": "Taktouka",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "small",
       "defaultCookingMethod": "sauteed",
       "tags": [
         "salad",
@@ -103,7 +96,6 @@
       "name": "Bissara",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "medium",
       "defaultCookingMethod": "boiled",
       "tags": [
         "soup",
@@ -117,7 +109,6 @@
       "name": "Fried Eggs",
       "defaultQuantity": 2,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "fried",
       "tags": [
         "protein-rich",
@@ -132,7 +123,6 @@
       "name": "Boiled Eggs",
       "defaultQuantity": 2,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "boiled",
       "tags": [
         "protein-rich",
@@ -146,7 +136,6 @@
       "name": "Grilled Sardines",
       "defaultQuantity": 4,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "grilled",
       "tags": [
         "seafood",
@@ -160,7 +149,6 @@
       "name": "Lamb Tagine",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "stewed",
       "tags": [
         "traditional",
@@ -174,7 +162,6 @@
       "name": "Baghrir",
       "defaultQuantity": 3,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "fried",
       "tags": [
         "breakfast-staple",
@@ -188,7 +175,6 @@
       "name": "Rfissa",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "stewed",
       "tags": [
         "traditional",
@@ -202,7 +188,6 @@
       "name": "Pastilla",
       "defaultQuantity": 1,
       "defaultUnit": "pieces",
-      "defaultPortion": "medium",
       "defaultCookingMethod": "baked",
       "tags": [
         "traditional",
@@ -216,7 +201,6 @@
       "name": "Kefta",
       "defaultQuantity": 4,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "grilled",
       "tags": [
         "traditional",
@@ -230,7 +214,6 @@
       "name": "Briouats",
       "defaultQuantity": 3,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "fried",
       "tags": [
         "snack",
@@ -244,7 +227,6 @@
       "name": "Mechoui",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "roasted",
       "tags": [
         "traditional",
@@ -258,7 +240,6 @@
       "name": "Tangia",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "stewed",
       "tags": [
         "traditional",
@@ -272,7 +253,6 @@
       "name": "Moroccan Salad",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "small",
       "defaultCookingMethod": "raw",
       "tags": [
         "salad",
@@ -287,7 +267,6 @@
       "name": "Plain Rice",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "medium",
       "defaultCookingMethod": "boiled",
       "tags": [
         "side-dish",
@@ -301,7 +280,6 @@
       "name": "Omelette",
       "defaultQuantity": 1,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "fried",
       "tags": [
         "breakfast",
@@ -315,7 +293,6 @@
       "name": "Tuna Sandwich",
       "defaultQuantity": 1,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "raw",
       "tags": [
         "quick",
@@ -329,7 +306,6 @@
       "name": "Shrimp Tagine",
       "defaultQuantity": 1,
       "defaultUnit": "plate",
-      "defaultPortion": "full",
       "defaultCookingMethod": "stewed",
       "tags": [
         "seafood",
@@ -343,7 +319,6 @@
       "name": "Yogurt Bowl",
       "defaultQuantity": 1,
       "defaultUnit": "bowl",
-      "defaultPortion": "medium",
       "defaultCookingMethod": "raw",
       "tags": [
         "breakfast",
@@ -357,7 +332,6 @@
       "name": "Dates",
       "defaultQuantity": 5,
       "defaultUnit": "pieces",
-      "defaultPortion": null,
       "defaultCookingMethod": "raw",
       "tags": [
         "snack",
