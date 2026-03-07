@@ -131,21 +131,9 @@ export function DatePicker({ isOpen, onClose, currentDate, onDateSelect }) {
             <ChevronLeft size={20} />
           </button>
 
-          <div className="flex items-center gap-2">
-            <h2 className="text-base font-semibold text-[var(--color-text-primary)]">
-              {MONTH_NAMES[month]} {year}
-            </h2>
-            <button
-              onClick={() => {
-                const todayDate = new Date().toISOString().split('T')[0];
-                onDateSelect(todayDate);
-                onClose();
-              }}
-              className="px-2 py-1 text-xs font-medium text-[var(--color-accent)] hover:bg-[var(--color-accent)]/10 rounded transition-colors"
-            >
-              Today
-            </button>
-          </div>
+          <h2 className="text-base font-semibold text-[var(--color-text-primary)]">
+            {MONTH_NAMES[month]} {year}
+          </h2>
 
           <div className="flex items-center gap-1">
             <button
@@ -184,12 +172,19 @@ export function DatePicker({ isOpen, onClose, currentDate, onDateSelect }) {
             <div className="w-2 h-2 rounded-full bg-[var(--color-accent)]" />
             <span>Has logs</span>
           </div>
-          <div className="flex items-center gap-1.5 text-xs text-[var(--color-text-secondary)]">
+          <button
+            onClick={() => {
+              const todayDate = new Date().toISOString().split('T')[0];
+              onDateSelect(todayDate);
+              onClose();
+            }}
+            className="flex items-center gap-1.5 text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] transition-colors"
+          >
             <div className="w-6 h-6 rounded bg-[var(--color-accent)]/10 flex items-center justify-center text-[var(--color-accent)] font-medium">
               {new Date().getDate()}
             </div>
             <span>Today</span>
-          </div>
+          </button>
         </div>
       </div>
     </div>
