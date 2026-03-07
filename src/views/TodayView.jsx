@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { Plus, Calendar } from 'lucide-react';
+import Masonry from 'react-masonry-css';
 import { DayHeader } from '../components/DayHeader';
 import { MealCard } from '../components/MealCard';
 import { FeelingCard } from '../components/FeelingCard';
@@ -189,53 +190,59 @@ export function TodayView() {
         </button>
       </div>
 
-      {/* Timeline — responsive grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 items-start">
-        {dailyLog.timeline.length === 0 ? (
-          <div className="col-span-full">
-            <EmptyState
-              icon={Calendar}
-              title="No entries yet"
-              description="Start by logging your first meal or how you're feeling. Track consistently to discover patterns."
-              actionLabel="Log Your First Meal"
-              onAction={() => setEditingMeal({})}
-            />
-          </div>
-        ) : (
-          dailyLog.timeline.map(evt => {
+      {/* Timeline — masonry layout */}
+      {dailyLog.timeline.length === 0 ? (
+        <EmptyState
+          icon={Calendar}
+          title="No entries yet"
+          description="Start by logging your first meal or how you're feeling. Track consistently to discover patterns."
+          actionLabel="Log Your First Meal"
+          onAction={() => setEditingMeal({})}
+        />
+      ) : (
+        <Masonry
+          breakpointCols={{ default: 4, 1280: 4, 1024: 3, 768: 2, 640: 1 }}
+          className="flex -ml-4 md:-ml-5 w-auto"
+          columnClassName="pl-4 md:pl-5 bg-clip-padding"
+        >
+          {dailyLog.timeline.map(evt => {
             if (evt.type === 'meal') {
               return (
-                <MealCard
-                  key={evt.id}
-                  meal={evt}
-                  onEdit={setEditingMeal}
-                  onDelete={handleMealDelete}
-                  onMealUpdate={handleMealUpdate}
-                />
+                <div key={evt.id} className="mb-4 md:mb-5">
+                  <MealCard
+                    meal={evt}
+                    onEdit={setEditingMeal}
+                    onDelete={handleMealDelete}
+                    onMealUpdate={handleMealUpdate}
+                  />
+                </div>
               );
             }
             if (evt.type === 'feeling') {
               return (
-                <FeelingCard
-                  key={evt.id}
-                  feeling={evt}
-                  onDelete={handleFeelingDelete}
-                />
+                <div key={evt.id} className="mb-4 md:mb-5">
+                  <FeelingCard
+                    feeling={evt}
+                    onDelete={handleFeelingDelete}
+                  />
+                </div>
               );
             }
             return null;
-          })
-        )}
-      </div>
+          })}
+        </Masonry>
+      )}
 
       {/* Meal edit / create form */}
-      {editingMeal !== null && (
-        <MealForm
-          meal={Object.keys(editingMeal).length > 0 ? editingMeal : null}
-          onSave={handleMealFormSave}
-          onCancel={() => setEditingMeal(null)}
-        />
-      )}
+      {
+        editingMeal !== null && (
+          <MealForm
+            meal={Object.keys(editingMeal).length > 0 ? editingMeal : null}
+            onSave={handleMealFormSave}
+            onCancel={() => setEditingMeal(null)}
+          />
+        )
+      }
 
       {/* Feeling modal */}
       <FeelingModal

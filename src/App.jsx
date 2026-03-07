@@ -2,12 +2,15 @@
 // Related: Sidebar.jsx for navigation, TodayView.jsx and FoodsView.jsx for content.
 
 import { useState, useEffect } from 'react';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { StorageWarning } from './components/StorageWarning';
 import { Sidebar } from './components/Sidebar';
 import { Onboarding } from './components/Onboarding';
 import { TodayView } from './views/TodayView';
 import { FoodsView } from './views/FoodsView';
 import { StatsView } from './views/StatsView';
 import { SettingsView } from './views/SettingsView';
+import { getStorageInfo, shouldShowWarning, dismissWarning } from './utils/storageQuota';
 
 // Check if user has completed onboarding
 const hasCompletedOnboarding = () => {
@@ -22,30 +25,92 @@ const completeOnboarding = () => {
 function App() {
   const [activeView, setActiveView] = useState('today');
   const [showOnboarding, setShowOnboarding] = useState(!hasCompletedOnboarding());
+  const [showStorageWarning, setShowStorageWarning] = useState(false);
+  const [storageInfo, setStorageInfo] = useState(null);
 
   const handleOnboardingComplete = () => {
     completeOnboarding();
     setShowOnboarding(false);
   };
 
+  // Check storage quota on mount
+  useEffect(() => {
+    if (shouldShowWarning()) {
+      const info = getStorageInfo();
+      setStorageInfo(info);
+      setShowStorageWarning(true);
+    }
+  }, []);
+
+  const handleDismissWarning = () => {
+    dismissWarning();
+    setShowStorageWarning(false);
+  };
+
+  const handleExport = () => {
+    try {
+      const data = {};
+      const relevantPrefixes = ['day_', 'food_', 'drink_'];
+
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        const isRelevant = relevantPrefixes.some(prefix => key.startsWith(prefix)) || key === 'user_preferences' || key === 'app_seeded';
+        if (!isRelevant) continue;
+
+        try {
+          data[key] = JSON.parse(localStorage.getItem(key));
+        } catch {
+          data[key] = localStorage.getItem(key);
+        }
+      }
+
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `food-diary-backup-${new Date().toISOString().split('T')[0]}.json`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+
+      setShowStorageWarning(false);
+    } catch (err) {
+      console.error('Export failed:', err);
+    }
+  };
+
   // Show onboarding if not completed
   if (showOnboarding) {
-    return <Onboarding onComplete={handleOnboardingComplete} />;
+    return (
+      <ErrorBoundary>
+        <Onboarding onComplete={handleOnboardingComplete} />
+      </ErrorBoundary>
+    );
   }
 
   return (
-    <div className="flex flex-col md:flex-row h-screen bg-[var(--color-bg-secondary)]">
-      {/* Navigation - bottom on mobile, left side on desktop */}
-      <Sidebar activeView={activeView} onNavigate={setActiveView} />
+    <ErrorBoundary>
+      {showStorageWarning && storageInfo && (
+        <StorageWarning
+          storageInfo={storageInfo}
+          onDismiss={handleDismissWarning}
+          onExport={handleExport}
+        />
+      )}
+      <div className="flex flex-col md:flex-row h-screen bg-[var(--color-bg-secondary)]">
+        {/* Navigation - bottom on mobile, left side on desktop */}
+        <Sidebar activeView={activeView} onNavigate={setActiveView} />
 
-      {/* Main content - full height minus bottom nav on mobile */}
-      <main className="flex-1 overflow-auto pb-16 md:pb-0">
-        {activeView === 'today' && <TodayView />}
-        {activeView === 'foods' && <FoodsView />}
-        {activeView === 'stats' && <StatsView />}
-        {activeView === 'settings' && <SettingsView />}
-      </main>
-    </div>
+        {/* Main content - full height minus bottom nav on mobile */}
+        <main className="flex-1 overflow-auto pb-16 md:pb-0">
+          {activeView === 'today' && <TodayView />}
+          {activeView === 'foods' && <FoodsView />}
+          {activeView === 'stats' && <StatsView />}
+          {activeView === 'settings' && <SettingsView />}
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }
 

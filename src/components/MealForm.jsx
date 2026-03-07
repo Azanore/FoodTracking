@@ -94,12 +94,18 @@ export function MealForm({ meal, onSave, onCancel }) {
     });
   };
 
-  // Escape to cancel
+  // Keyboard shortcuts: ESC to cancel, Enter to submit
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') onCancel(); };
+    const handler = (e) => {
+      if (e.key === 'Escape') onCancel();
+      if (e.key === 'Enter' && !e.shiftKey && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [onCancel]);
+  }, [onCancel, handleSubmit]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-0 md:p-4">

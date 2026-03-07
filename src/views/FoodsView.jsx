@@ -4,6 +4,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import { Plus, Search, X, UtensilsCrossed } from 'lucide-react';
+import Masonry from 'react-masonry-css';
 import { FoodCard } from '../components/FoodCard';
 import { DrinkCard } from '../components/DrinkCard';
 import { ItemForm } from '../components/ItemForm';
@@ -329,18 +330,23 @@ export function FoodsView() {
               />
             )
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+            <Masonry
+              breakpointCols={{ default: 4, 1280: 4, 1024: 3, 640: 2 }}
+              className="flex -ml-4 md:-ml-5 w-auto"
+              columnClassName="pl-4 md:pl-5 bg-clip-padding"
+            >
               {filteredFoods.map(food => (
-                <FoodCard
-                  key={food.id}
-                  food={food}
-                  onEdit={() => openEdit(food)}
-                  onDelete={() => handleDeleteFood(food.id)}
-                  onQuickLog={() => handleQuickLog(food)}
-                  onTagClick={(tag) => setActiveTag(tag)}
-                />
+                <div key={food.id} className="mb-4 md:mb-5">
+                  <FoodCard
+                    food={food}
+                    onEdit={() => openEdit(food)}
+                    onDelete={() => handleDeleteFood(food.id)}
+                    onQuickLog={() => handleQuickLog(food)}
+                    onTagClick={(tag) => setActiveTag(tag)}
+                  />
+                </div>
               ))}
-            </div>
+            </Masonry>
           )
         )}
 
@@ -361,18 +367,23 @@ export function FoodsView() {
               />
             )
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
+            <Masonry
+              breakpointCols={{ default: 4, 1280: 4, 1024: 3, 640: 2 }}
+              className="flex -ml-4 md:-ml-5 w-auto"
+              columnClassName="pl-4 md:pl-5 bg-clip-padding"
+            >
               {filteredDrinks.map(drink => (
-                <DrinkCard
-                  key={drink.id}
-                  drink={drink}
-                  onEdit={() => openEdit(drink)}
-                  onDelete={() => handleDeleteDrink(drink.id)}
-                  onQuickLog={() => handleQuickLog(drink)}
-                  onTagClick={(tag) => setActiveTag(tag)}
-                />
+                <div key={drink.id} className="mb-4 md:mb-5">
+                  <DrinkCard
+                    drink={drink}
+                    onEdit={() => openEdit(drink)}
+                    onDelete={() => handleDeleteDrink(drink.id)}
+                    onQuickLog={() => handleQuickLog(drink)}
+                    onTagClick={(tag) => setActiveTag(tag)}
+                  />
+                </div>
               ))}
-            </div>
+            </Masonry>
           )
         )}
 

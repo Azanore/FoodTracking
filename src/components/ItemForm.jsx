@@ -41,12 +41,18 @@ export function ItemForm({ item, defaultType = 'food', onSave, onCancel }) {
   // Focus name on open
   useEffect(() => { setTimeout(() => nameRef.current?.focus(), 50); }, []);
 
-  // Escape to cancel
+  // Keyboard shortcuts: ESC to cancel, Enter to submit
   useEffect(() => {
-    const handler = (e) => { if (e.key === 'Escape') onCancel(); };
+    const handler = (e) => {
+      if (e.key === 'Escape') onCancel();
+      if (e.key === 'Enter' && !e.shiftKey && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+        handleSubmit();
+      }
+    };
     window.addEventListener('keydown', handler);
     return () => window.removeEventListener('keydown', handler);
-  }, [onCancel]);
+  }, [onCancel, handleSubmit]);
 
   // Reset unit default when type changes in create mode
   useEffect(() => {
