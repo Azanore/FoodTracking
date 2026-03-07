@@ -2,9 +2,10 @@
 // Related: App.jsx renders this, db.js for data operations
 // Should not include: Statistics, daily logging
 
-import { useState } from 'react';
-import { Download, Upload, AlertCircle, CheckCircle, Trash2, X, Zap } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Download, Upload, AlertCircle, CheckCircle, Trash2, X, Zap, HardDrive } from 'lucide-react';
 import { saveTestDataToStorage } from '../utils/generateTestData';
+import { getStorageInfo } from '../utils/storageQuota';
 
 export function SettingsView() {
   const [message, setMessage] = useState(null); // { type: 'success' | 'error', text: string }
@@ -12,6 +13,12 @@ export function SettingsView() {
   const [resetStep, setResetStep] = useState('prompt'); // 'prompt' | 'confirm'
   const [confirmText, setConfirmText] = useState('');
   const [generating, setGenerating] = useState(false);
+  const [storageInfo, setStorageInfo] = useState(null);
+
+  // Load storage info on mount
+  useEffect(() => {
+    setStorageInfo(getStorageInfo());
+  }, []);
 
   // Generate test data
   const handleGenerateTestData = () => {
@@ -168,6 +175,21 @@ export function SettingsView() {
         <h2 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3">Data Management</h2>
 
         <div className="space-y-3">
+          {/* Storage Usage */}
+          {storageInfo && (
+            <div className="flex items-start gap-3 pb-3 border-b border-[var(--color-border-primary)]">
+              <HardDrive size={18} className={`shrink-0 mt-0.5 ${storageInfo.isNearLimit ? 'text-orange-500' : storageInfo.isCritical ? 'text-[var(--color-danger)]' : 'text-[var(--color-text-secondary)]'}`} />
+              <div className="flex-1 min-w-0">
+                <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-1">Storage Usage</h3>
+                <p className={`text-xs ${storageInfo.isNearLimit ? 'text-orange-500' : storageInfo.isCritical ? 'text-[var(--color-danger)]' : 'text-[var(--color-text-secondary)]'}`}>
+                  {storageInfo.usedMB} MB of {storageInfo.limitMB} MB ({storageInfo.percentage}%)
+                  {storageInfo.isCritical && ' - Critical! Export your data.'}
+                  {storageInfo.isNearLimit && !storageInfo.isCritical && ' - Running low'}
+                </p>
+              </div>
+            </div>
+          )}
+
           {/* Generate Test Data */}
           <div className="flex items-start justify-between gap-4 pb-3 border-b border-[var(--color-border-primary)]">
             <div className="flex-1">
