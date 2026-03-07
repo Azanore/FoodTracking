@@ -3,11 +3,12 @@
 // Should not include: Daily meal management, settings.
 
 import { useState, useEffect, useMemo } from 'react';
-import { Plus, Search, X } from 'lucide-react';
+import { Plus, Search, X, UtensilsCrossed } from 'lucide-react';
 import { FoodCard } from '../components/FoodCard';
 import { DrinkCard } from '../components/DrinkCard';
 import { ItemForm } from '../components/ItemForm';
 import { LogItemModal } from '../components/LogItemModal';
+import { EmptyState } from '../components/EmptyState';
 import { getAllFoods, getAllDrinks, deleteFood, deleteDrink, getDailyLog, saveDailyLog } from '../services/db';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -327,9 +328,19 @@ export function FoodsView() {
         {/* ── Foods grid ── */}
         {activeTab === 'foods' && (
           filteredFoods.length === 0 ? (
-            <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
-              {searchQuery ? `No foods match "${searchQuery}"` : 'No custom foods yet. Add your first!'}
-            </p>
+            searchQuery ? (
+              <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
+                No foods match "{searchQuery}"
+              </p>
+            ) : (
+              <EmptyState
+                icon={UtensilsCrossed}
+                title="No foods in library"
+                description="Add foods you eat often for quick logging. Start with your breakfast staples."
+                actionLabel="Add Your First Food"
+                onAction={() => openAdd('food')}
+              />
+            )
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
               {filteredFoods.map(food => (
@@ -349,9 +360,19 @@ export function FoodsView() {
         {/* ── Drinks grid ── */}
         {activeTab === 'drinks' && (
           filteredDrinks.length === 0 ? (
-            <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
-              {searchQuery ? `No drinks match "${searchQuery}"` : 'No custom drinks yet. Add your first!'}
-            </p>
+            searchQuery ? (
+              <p className="text-center text-sm text-[var(--color-text-secondary)] py-16">
+                No drinks match "{searchQuery}"
+              </p>
+            ) : (
+              <EmptyState
+                icon={UtensilsCrossed}
+                title="No drinks in library"
+                description="Add drinks you have regularly for quick logging. Coffee, tea, water, etc."
+                actionLabel="Add Your First Drink"
+                onAction={() => openAdd('drink')}
+              />
+            )
           ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5">
               {filteredDrinks.map(drink => (

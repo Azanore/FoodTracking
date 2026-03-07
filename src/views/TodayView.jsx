@@ -3,12 +3,13 @@
 // Should not include: Food library, settings.
 
 import { useState, useEffect } from 'react';
-import { Plus } from 'lucide-react';
+import { Plus, Calendar } from 'lucide-react';
 import { DayHeader } from '../components/DayHeader';
 import { MealCard } from '../components/MealCard';
 import { FeelingCard } from '../components/FeelingCard';
 import { MealForm } from '../components/MealForm';
 import { FeelingModal } from '../components/FeelingModal';
+import { EmptyState } from '../components/EmptyState';
 import { getDailyLog, saveDailyLog } from '../services/db';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -122,7 +123,7 @@ export function TodayView() {
 
   const handleFeelingSave = (feelingData) => {
     const timeline = [...dailyLog.timeline, feelingData];
-    // Sort by time (feelings with specific time, then meals, then time-of-day feelings)
+    // Sort by time
     timeline.sort((a, b) => {
       const aTime = a.time || '23:59';
       const bTime = b.time || '23:59';
@@ -134,6 +135,14 @@ export function TodayView() {
   const handleFeelingDelete = (feelingId) => {
     const timeline = dailyLog.timeline.filter(evt => evt.id !== feelingId);
     persist({ ...dailyLog, timeline });
+  };
+
+  // Get recent feelings for quick access
+  const getRecentFeelings = () => {
+    const feelings = dailyLog.timeline
+      .filter(evt => evt.type === 'feeling' && evt.feeling)
+      .map(evt => evt.feeling);
+    return [...new Set(feelings)].slice(0, 5);
   };
 
   // ── Render ────────────────────────────────────────────────────────────────
@@ -182,29 +191,41 @@ export function TodayView() {
 
       {/* Timeline — responsive grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-5 items-start">
-        {dailyLog.timeline.map(evt => {
-          if (evt.type === 'meal') {
-            return (
-              <MealCard
-                key={evt.id}
-                meal={evt}
-                onEdit={setEditingMeal}
-                onDelete={handleMealDelete}
-                onMealUpdate={handleMealUpdate}
-              />
-            );
-          }
-          if (evt.type === 'feeling') {
-            return (
-              <FeelingCard
-                key={evt.id}
-                feeling={evt}
-                onDelete={handleFeelingDelete}
-              />
-            );
-          }
-          return null;
-        })}
+        {dailyLog.timeline.length === 0 ? (
+          <div className="col-span-full">
+            <EmptyState
+              icon={Calendar}
+              title="No entries yet"
+              description="Start by logging your first meal or how you're feeling. Track consistently to discover patterns."
+              actionLabel="Log Your First Meal"
+              onAction={() => setEditingMeal({})}
+            />
+          </div>
+        ) : (
+          dailyLog.timeline.map(evt => {
+            if (evt.type === 'meal') {
+              return (
+                <MealCard
+                  key={evt.id}
+                  meal={evt}
+                  onEdit={setEditingMeal}
+                  onDelete={handleMealDelete}
+                  onMealUpdate={handleMealUpdate}
+                />
+              );
+            }
+            if (evt.type === 'feeling') {
+              return (
+                <FeelingCard
+                  key={evt.id}
+                  feeling={evt}
+                  onDelete={handleFeelingDelete}
+                />
+              );
+            }
+            return null;
+          })
+        )}
       </div>
 
       {/* Meal edit / create form */}
@@ -222,6 +243,7 @@ export function TodayView() {
         onClose={() => setShowFeelingModal(false)}
         onSave={handleFeelingSave}
         meals={dailyLog.timeline.filter(evt => evt.type === 'meal')}
+        recentFeelings={getRecentFeelings()}
       />
     </div>
   );

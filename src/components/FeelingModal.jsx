@@ -1,9 +1,9 @@
-// File purpose: Modal for logging feelings/symptoms with flexible time options.
+// File purpose: Modal for logging a single feeling with search-first UI.
 // Related: TodayView.jsx triggers this, timeline stores feeling events.
 // Should not include: Meal management, food library.
 
 import { useState, useEffect, useRef } from 'react';
-import { X, Plus } from 'lucide-react';
+import { X, Search, ChevronDown, ChevronUp } from 'lucide-react';
 
 // Feeling categories with common options
 const FEELING_CATEGORIES = {
@@ -15,6 +15,9 @@ const FEELING_CATEGORIES = {
   Sleep: ['slept-well', 'insomnia', 'restless', 'woke-up-refreshed', 'nightmares'],
 };
 
+// Flatten all feelings for search
+const ALL_FEELINGS = Object.values(FEELING_CATEGORIES).flat();
+
 // Time granularity options
 const TIME_OPTIONS = [
   { value: 'specific', label: 'Specific time' },
@@ -24,17 +27,49 @@ const TIME_OPTIONS = [
 
 const TIME_OF_DAY_OPTIONS = ['morning', 'afternoon', 'evening', 'night'];
 
+// Map time-of-day to approximate times for sorting
+const TIME_OF_DAY_MAP = {
+  morning: '09:00',
+  afternoon: '14:00',
+  evening: '18:00',
+  night: '21:00',
+};
+
 const getCurrentTime = () => {
   const n = new Date();
   return `${String(n.getHours()).padStart(2, '0')}:${String(n.getMinutes()).padStart(2, '0')}`;
 };
 
+// Get custom feelings from localStorage
+const getCustomFeelings = () => {
+  try {
+    const stored = localStorage.getItem('custom_feelings');
+    return stored ? JSON.parse(stored) : [];
+  } catch {
+    return [];
+  }
+};
+
+// Save custom feeling to localStorage
+const saveCustomFeeling = (feeling) => {
+  try {
+    const customs = getCustomFeelings();
+    if (!customs.includes(feeling) && !ALL_FEELINGS.includes(feeling)) {
+      customs.push(feeling);
+      localStorage.setItem('custom_feelings', JSON.stringify(customs));
+    }
+  } catch (e) {
+    console.error('Failed to save custom feeling:', e);
+  }
+};
+
 /**
- * FeelingModal - log how you felt with flexible time tracking
+ * FeelingModal - log a single feeling with search-first UI
  */
-export function FeelingModal({ isOpen, onClose, onSave, meals = [] }) {
-  const [selectedFeelings, setSelectedFeelings] = useState([]);
-  const [customFeeling, setCustomFeeling] = useState('');
+export function FeelingModal({ isOpen, onClose, onSave, meals = [], recentFeelings = [] }) {
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFeeling, setSelectedFeeling] = useState('');
+  const [expandedCategories, setExpandedCategories] = useState({});
   const [timeGranularity, setTimeGranularity] = useState('specific');
   const [specificTime, setSpecificTime] = useState(getCurrentTime());
   const [timeOfDay, setTimeOfDay] = useState('afternoon');
@@ -43,13 +78,20 @@ export function FeelingModal({ isOpen, onClose, onSave, meals = [] }) {
   const [duration, setDuration] = useState('');
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
-  const customInputRef = useRef(null);
+  const searchRef = useRef(null);
+  const [customFeelings, setCustomFeelings] = useState([]);
+
+  // Load custom feelings
+  useEffect(() => {
+    setCustomFeelings(getCustomFeelings());
+  }, []);
 
   // Reset form when opened
   useEffect(() => {
     if (isOpen) {
-      setSelectedFeelings([]);
-      setCustomFeeling('');
+      setSearchQuery('');
+      setSelectedFeeling('');
+      setExpandedCategories({});
       setTimeGranularity('specific');
       setSpecificTime(getCurrentTime());
       setTimeOfDay('afternoon');
@@ -58,6 +100,7 @@ export function FeelingModal({ isOpen, onClose, onSave, meals = [] }) {
       setDuration('');
       setNotes('');
       setError('');
+      setTimeout(() => searchRef.current?.focus(), 50);
     }
   }, [isOpen]);
 
@@ -68,31 +111,39 @@ export function FeelingModal({ isOpen, onClose, onSave, meals = [] }) {
     return () => window.removeEventListener('keydown', handler);
   }, [isOpen, onClose]);
 
-  const toggleFeeling = (feeling) => {
-    setSelectedFeelings(prev =>
-      prev.includes(feeling) ? prev.filter(f => f !== feeling) : [...prev, feeling]
-    );
+  // Filter feelings by search
+  const filteredFeelings = searchQuery.trim()
+    ? [...ALL_FEELINGS, ...customFeelings].filter(f =>
+      f.toLowerCase().includes(searchQuery.toLowerCase())
+    )
+    : [];
+
+  const toggleCategory = (category) => {
+    setExpandedCategories(prev => ({ ...prev, [category]: !prev[category] }));
   };
 
-  const handleAddCustom = () => {
-    const custom = customFeeling.trim().toLowerCase();
-    if (custom && !selectedFeelings.includes(custom)) {
-      setSelectedFeelings([...selectedFeelings, custom]);
-      setCustomFeeling('');
-      customInputRef.current?.focus();
+  const selectFeeling = (feeling) => {
+    setSelectedFeeling(feeling);
+    setSearchQuery('');
+
+    // Save as custom if not in predefined list
+    if (!ALL_FEELINGS.includes(feeling)) {
+      saveCustomFeeling(feeling);
+      setCustomFeelings(getCustomFeelings());
     }
   };
 
-  const handleCustomKeyDown = (e) => {
-    if (e.key === 'Enter') {
+  const handleSearchKeyDown = (e) => {
+    if (e.key === 'Enter' && searchQuery.trim()) {
       e.preventDefault();
-      handleAddCustom();
+      const custom = searchQuery.trim().toLowerCase();
+      selectFeeling(custom);
     }
   };
 
   const handleSave = () => {
-    if (selectedFeelings.length === 0) {
-      setError('Select at least one feeling.');
+    if (!selectedFeeling) {
+      setError('Select a feeling.');
       return;
     }
 
@@ -100,19 +151,25 @@ export function FeelingModal({ isOpen, onClose, onSave, meals = [] }) {
       id: `feeling_${crypto.randomUUID().slice(0, 8)}`,
       type: 'feeling',
       timeGranularity,
-      feelings: selectedFeelings,
+      feeling: selectedFeeling,
       severity: severity || null,
       duration: duration || null,
       notes: notes.trim() || null,
     };
 
-    // Add time-specific fields
+    // Add time-specific fields and sortable time
     if (timeGranularity === 'specific') {
       feeling.time = specificTime;
     } else if (timeGranularity === 'time-of-day') {
       feeling.timeOfDay = timeOfDay;
+      feeling.time = TIME_OF_DAY_MAP[timeOfDay]; // For sorting
     } else if (timeGranularity === 'after-meal') {
       feeling.relatedMealId = relatedMealId;
+      // Find meal time for sorting
+      const meal = meals.find(m => m.id === relatedMealId);
+      if (meal) {
+        feeling.time = meal.time;
+      }
     }
 
     onSave(feeling);
@@ -144,74 +201,106 @@ export function FeelingModal({ isOpen, onClose, onSave, meals = [] }) {
         <div className="px-5 pb-5 overflow-y-auto flex-1">
           <div className="space-y-5 py-4">
 
-            {/* Feelings selection */}
+            {/* Search box */}
             <div>
-              <label className="block text-xs font-semibold mb-3 text-[var(--color-text-secondary)] uppercase tracking-wide">
-                Select Feelings *
+              <label className="block text-xs font-semibold mb-2 text-[var(--color-text-secondary)] uppercase tracking-wide">
+                How did you feel? *
               </label>
-              {Object.entries(FEELING_CATEGORIES).map(([category, feelings]) => (
-                <div key={category} className="mb-4">
-                  <h3 className="text-xs font-medium text-[var(--color-text-primary)] mb-2">{category}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {feelings.map(feeling => (
-                      <button
-                        key={feeling}
-                        type="button"
-                        onClick={() => toggleFeeling(feeling)}
-                        className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-all touch-manipulation ${selectedFeelings.includes(feeling)
-                            ? 'border-[var(--color-accent)] bg-[var(--color-accent)]/10 text-[var(--color-accent)]'
-                            : 'border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40'
-                          }`}
-                      >
-                        {feeling}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-              ))}
-
-              {/* Custom feeling input */}
-              <div className="flex gap-2 mt-3">
+              <div className="relative">
+                <Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--color-text-secondary)]" />
                 <input
-                  ref={customInputRef}
+                  ref={searchRef}
                   type="text"
-                  value={customFeeling}
-                  onChange={(e) => setCustomFeeling(e.target.value)}
-                  onKeyDown={handleCustomKeyDown}
-                  placeholder="Add custom feeling…"
-                  className="flex-1 px-3 py-2 md:py-1.5 text-xs border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-primary)] transition-all"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onKeyDown={handleSearchKeyDown}
+                  placeholder="Search or type custom feeling…"
+                  className="w-full pl-9 pr-4 py-2.5 md:py-2 text-sm border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-secondary)] transition-all"
                 />
-                <button
-                  type="button"
-                  onClick={handleAddCustom}
-                  className="shrink-0 p-2 text-white bg-[var(--color-accent)] hover:opacity-90 rounded-lg transition-all touch-manipulation"
-                  title="Add custom"
-                >
-                  <Plus size={16} className="md:w-[14px] md:h-[14px]" />
-                </button>
               </div>
 
-              {/* Selected feelings display */}
-              {selectedFeelings.length > 0 && (
-                <div className="flex flex-wrap gap-1.5 mt-3 p-3 bg-[var(--color-bg-secondary)] rounded-lg border border-[var(--color-border-primary)]">
-                  {selectedFeelings.map(feeling => (
-                    <span
+              {/* Search results */}
+              {searchQuery && filteredFeelings.length > 0 && (
+                <div className="mt-2 p-2 bg-[var(--color-bg-secondary)] border border-[var(--color-border-primary)] rounded-lg max-h-48 overflow-y-auto">
+                  {filteredFeelings.map(feeling => (
+                    <button
                       key={feeling}
-                      className="inline-flex items-center gap-1 px-2 py-0.5 bg-[var(--color-accent)]/10 text-[var(--color-accent)] text-xs rounded-full font-medium"
+                      type="button"
+                      onClick={() => selectFeeling(feeling)}
+                      className="w-full text-left px-3 py-2 text-sm text-[var(--color-text-primary)] hover:bg-[var(--color-hover-bg)] rounded transition-colors"
                     >
                       {feeling}
-                      <button
-                        type="button"
-                        onClick={() => toggleFeeling(feeling)}
-                        className="hover:opacity-60"
-                      >
-                        <X size={10} />
-                      </button>
-                    </span>
+                    </button>
                   ))}
                 </div>
               )}
+
+              {/* Selected feeling display */}
+              {selectedFeeling && (
+                <div className="mt-3 p-3 bg-[var(--color-accent)]/10 border border-[var(--color-accent)] rounded-lg flex items-center justify-between">
+                  <span className="text-sm font-medium text-[var(--color-accent)]">{selectedFeeling}</span>
+                  <button
+                    type="button"
+                    onClick={() => setSelectedFeeling('')}
+                    className="text-xs text-[var(--color-accent)] hover:underline"
+                  >
+                    Change
+                  </button>
+                </div>
+              )}
             </div>
+
+            {/* Recent feelings (if no search) */}
+            {!searchQuery && !selectedFeeling && (recentFeelings.length > 0 || customFeelings.length > 0) && (
+              <div>
+                <h3 className="text-xs font-medium text-[var(--color-text-primary)] mb-2">Recent & Custom</h3>
+                <div className="flex flex-wrap gap-2">
+                  {[...new Set([...recentFeelings, ...customFeelings])].slice(0, 10).map(feeling => (
+                    <button
+                      key={feeling}
+                      type="button"
+                      onClick={() => selectFeeling(feeling)}
+                      className="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40 transition-all"
+                    >
+                      {feeling}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Categories (collapsed by default) */}
+            {!searchQuery && !selectedFeeling && (
+              <div>
+                <h3 className="text-xs font-medium text-[var(--color-text-primary)] mb-2">Browse by Category</h3>
+                {Object.entries(FEELING_CATEGORIES).map(([category, feelings]) => (
+                  <div key={category} className="mb-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleCategory(category)}
+                      className="w-full flex items-center justify-between px-3 py-2 text-sm font-medium text-[var(--color-text-primary)] bg-[var(--color-bg-secondary)] hover:bg-[var(--color-hover-bg)] rounded-lg transition-colors"
+                    >
+                      <span>{category} ({feelings.length})</span>
+                      {expandedCategories[category] ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                    </button>
+                    {expandedCategories[category] && (
+                      <div className="flex flex-wrap gap-2 mt-2 px-3">
+                        {feelings.map(feeling => (
+                          <button
+                            key={feeling}
+                            type="button"
+                            onClick={() => selectFeeling(feeling)}
+                            className="px-3 py-1.5 rounded-full text-xs font-medium border border-[var(--color-border-primary)] text-[var(--color-text-secondary)] hover:border-[var(--color-accent)]/40 transition-all"
+                          >
+                            {feeling}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Time tracking */}
             <div>

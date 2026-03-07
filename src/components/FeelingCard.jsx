@@ -20,15 +20,14 @@ const formatTime = (feeling) => {
 };
 
 /**
- * FeelingCard - displays a feeling event from timeline
+ * FeelingCard - displays a single feeling event from timeline
  */
 export function FeelingCard({ feeling, onDelete }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
 
   const timeDisplay = formatTime(feeling);
-  const primaryFeelings = feeling.feelings.slice(0, 3).join(', ');
-  const hasMore = feeling.feelings.length > 3;
+  const feelingText = feeling.feeling || 'unknown';
 
   const handleDeleteClick = (e) => {
     e.stopPropagation();
@@ -60,7 +59,7 @@ export function FeelingCard({ feeling, onDelete }) {
               <span className="text-xs text-[var(--color-text-secondary)] capitalize">{timeDisplay}</span>
             </div>
             <p className="text-xs text-[var(--color-text-secondary)] truncate leading-snug">
-              {primaryFeelings}{hasMore && '…'}
+              {feelingText}
               {feeling.severity && <span className="ml-1 opacity-60">(severity: {feeling.severity})</span>}
             </p>
           </div>
@@ -74,8 +73,8 @@ export function FeelingCard({ feeling, onDelete }) {
           onClick={handleDeleteClick}
           onBlur={() => setConfirmDelete(false)}
           className={`shrink-0 flex items-center gap-0.5 px-2 md:px-1.5 py-1.5 md:py-1 rounded transition-colors text-xs font-medium touch-manipulation ${confirmDelete
-              ? 'bg-[var(--color-danger)] text-white'
-              : 'text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] hover:bg-[var(--color-hover-bg)]'
+            ? 'bg-[var(--color-danger)] text-white'
+            : 'text-[var(--color-text-secondary)] hover:text-[var(--color-danger)] hover:bg-[var(--color-hover-bg)]'
             }`}
           title={confirmDelete ? 'Click again to confirm delete' : 'Delete feeling'}
         >
@@ -91,13 +90,11 @@ export function FeelingCard({ feeling, onDelete }) {
       {isExpanded && (
         <div className="px-[var(--spacing-card-padding)] py-2 border-t border-[var(--color-border-primary)]">
 
-          {/* All feelings */}
-          <div className="flex flex-wrap gap-1.5 mb-2">
-            {feeling.feelings.map((f, i) => (
-              <span key={i} className="px-2 py-0.5 text-xs bg-[var(--color-accent)]/10 text-[var(--color-accent)] rounded-full font-medium">
-                {f}
-              </span>
-            ))}
+          {/* Feeling */}
+          <div className="mb-2">
+            <span className="px-3 py-1 text-sm bg-[var(--color-accent)]/10 text-[var(--color-accent)] rounded-full font-medium">
+              {feelingText}
+            </span>
           </div>
 
           {/* Details */}
