@@ -339,6 +339,163 @@
       ],
       "lastUsed": null,
       "usageCount": 0
+    },
+    {
+      "id": "food_cheese",
+      "name": "Cheese",
+      "defaultQuantity": 2,
+      "defaultUnit": "slices",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "dairy",
+        "breakfast"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_butter",
+      "name": "Butter",
+      "defaultQuantity": 1,
+      "defaultUnit": "tbsp",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "dairy",
+        "spread"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_pasta",
+      "name": "Pasta",
+      "defaultQuantity": 1,
+      "defaultUnit": "plate",
+      "defaultCookingMethod": "boiled",
+      "tags": [
+        "gluten",
+        "lunch"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_pizza",
+      "name": "Pizza",
+      "defaultQuantity": 2,
+      "defaultUnit": "slices",
+      "defaultCookingMethod": "baked",
+      "tags": [
+        "gluten",
+        "dairy",
+        "dinner"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_croissant",
+      "name": "Croissant",
+      "defaultQuantity": 1,
+      "defaultUnit": "pieces",
+      "defaultCookingMethod": "baked",
+      "tags": [
+        "gluten",
+        "breakfast"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_french_fries",
+      "name": "French Fries",
+      "defaultQuantity": 1,
+      "defaultUnit": "plate",
+      "defaultCookingMethod": "fried",
+      "tags": [
+        "fried",
+        "side-dish"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_banana",
+      "name": "Banana",
+      "defaultQuantity": 1,
+      "defaultUnit": "pieces",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "fruit",
+        "snack"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_apple",
+      "name": "Apple",
+      "defaultQuantity": 1,
+      "defaultUnit": "pieces",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "fruit",
+        "snack"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_almonds",
+      "name": "Almonds",
+      "defaultQuantity": 1,
+      "defaultUnit": "handful",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "nuts",
+        "snack"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_chocolate",
+      "name": "Chocolate",
+      "defaultQuantity": 2,
+      "defaultUnit": "pieces",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "sweet",
+        "snack"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_spicy_harissa",
+      "name": "Harissa Sauce",
+      "defaultQuantity": 1,
+      "defaultUnit": "tbsp",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "spicy",
+        "condiment"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
+    },
+    {
+      "id": "food_olives",
+      "name": "Olives",
+      "defaultQuantity": 10,
+      "defaultUnit": "pieces",
+      "defaultCookingMethod": "raw",
+      "tags": [
+        "side-dish",
+        "salty"
+      ],
+      "lastUsed": null,
+      "usageCount": 0
     }
   ],
   "userDrinks": [

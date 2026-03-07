@@ -4,7 +4,7 @@
 
 import { useState, useEffect, useMemo, useRef } from 'react';
 import { Search, X } from 'lucide-react';
-import { getAllFoods, getAllDrinks, incrementFoodUsage, incrementDrinkUsage } from '../services/db';
+import { getAllFoods, getAllDrinks } from '../services/db';
 
 const FOOD_UNITS = ['pieces', 'slices', 'plate', 'bowl', 'cup', 'g', 'oz', 'serving', 'spoon', 'tablespoon', 'teaspoon'];
 const DRINK_UNITS = ['ml', 'L', 'glass', 'cup', 'oz', 'can', 'bottle', 'serving', 'tablespoon', 'teaspoon'];
@@ -35,7 +35,7 @@ export function LogItemModal({ isOpen, onClose, onSave, mealLabel, preSelectedIt
     const load = async () => {
       const foods = await getAllFoods();
       const drinks = await getAllDrinks();
-      setItems([...foods, ...drinks].sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0)));
+      setItems([...foods, ...drinks].sort((a, b) => a.name.localeCompare(b.name)));
     };
     load();
     setSearchQuery('');
@@ -93,13 +93,6 @@ export function LogItemModal({ isOpen, onClose, onSave, mealLabel, preSelectedIt
       type: selectedItem.type || 'food',
       category: selectedItem.category || '',
     };
-
-    try {
-      if (selectedItem.type === 'drink') await incrementDrinkUsage(selectedItem.id);
-      else await incrementFoodUsage(selectedItem.id);
-    } catch (e) {
-      console.error('Failed to increment usage:', e);
-    }
 
     onSave(entry);
     onClose();

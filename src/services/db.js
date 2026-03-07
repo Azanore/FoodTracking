@@ -109,8 +109,6 @@ export const saveFood = async (food) => {
       ...food,
       id: food.id || generateId('food'),
       createdAt: food.createdAt || now(),
-      lastUsed: food.lastUsed || null,
-      usageCount: food.usageCount || 0,
       isDeleted: false
     };
     localStorage.setItem(savedFood.id, JSON.stringify(savedFood));
@@ -131,20 +129,6 @@ export const deleteFood = async (id) => {
   } catch (error) {
     console.error('Failed to delete food:', error);
     throw new Error('Failed to delete food');
-  }
-};
-
-export const incrementFoodUsage = async (id) => {
-  try {
-    const food = await getFoodById(id);
-    if (food) {
-      food.usageCount = (food.usageCount || 0) + 1;
-      food.lastUsed = now();
-      localStorage.setItem(id, JSON.stringify(food));
-    }
-  } catch (error) {
-    console.error('Failed to increment food usage:', error);
-    throw new Error('Failed to update food usage');
   }
 };
 
@@ -188,8 +172,6 @@ export const saveDrink = async (drink) => {
       ...drink,
       id: drink.id || generateId('drink'),
       createdAt: drink.createdAt || now(),
-      lastUsed: drink.lastUsed || null,
-      usageCount: drink.usageCount || 0,
       isDeleted: false
     };
     localStorage.setItem(savedDrink.id, JSON.stringify(savedDrink));
@@ -210,20 +192,6 @@ export const deleteDrink = async (id) => {
   } catch (error) {
     console.error('Failed to delete drink:', error);
     throw new Error('Failed to delete drink');
-  }
-};
-
-export const incrementDrinkUsage = async (id) => {
-  try {
-    const drink = await getDrinkById(id);
-    if (drink) {
-      drink.usageCount = (drink.usageCount || 0) + 1;
-      drink.lastUsed = now();
-      localStorage.setItem(id, JSON.stringify(drink));
-    }
-  } catch (error) {
-    console.error('Failed to increment drink usage:', error);
-    throw new Error('Failed to update drink usage');
   }
 };
 

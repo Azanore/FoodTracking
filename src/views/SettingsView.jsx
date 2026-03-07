@@ -3,13 +3,36 @@
 // Should not include: Statistics, daily logging
 
 import { useState } from 'react';
-import { Download, Upload, AlertCircle, CheckCircle, Trash2, X } from 'lucide-react';
+import { Download, Upload, AlertCircle, CheckCircle, Trash2, X, Zap } from 'lucide-react';
+import { saveTestDataToStorage } from '../utils/generateTestData';
 
 export function SettingsView() {
   const [message, setMessage] = useState(null); // { type: 'success' | 'error', text: string }
   const [showResetModal, setShowResetModal] = useState(false);
   const [resetStep, setResetStep] = useState('prompt'); // 'prompt' | 'confirm'
   const [confirmText, setConfirmText] = useState('');
+  const [generating, setGenerating] = useState(false);
+
+  // Generate test data
+  const handleGenerateTestData = () => {
+    try {
+      setGenerating(true);
+      const logs = saveTestDataToStorage();
+      setMessage({
+        type: 'success',
+        text: `Generated ${logs.length} days with logs (out of 60 days, 80% coverage) with planted correlations!`
+      });
+      setTimeout(() => {
+        setMessage(null);
+        window.location.reload();
+      }, 2500);
+    } catch (err) {
+      setMessage({ type: 'error', text: `Generation failed: ${err.message}` });
+      setTimeout(() => setMessage(null), 5000);
+    } finally {
+      setGenerating(false);
+    }
+  };
 
   // Export all localStorage data as JSON
   const handleExport = () => {
@@ -145,6 +168,24 @@ export function SettingsView() {
         <h2 className="text-sm font-semibold text-[var(--color-text-primary)] mb-3">Data Management</h2>
 
         <div className="space-y-3">
+          {/* Generate Test Data */}
+          <div className="flex items-start justify-between gap-4 pb-3 border-b border-[var(--color-border-primary)]">
+            <div className="flex-1">
+              <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-1">Generate Test Data</h3>
+              <p className="text-xs text-[var(--color-text-secondary)]">
+                Create 60 days of realistic logs with planted correlations for testing Stats & Correlation Analysis.
+              </p>
+            </div>
+            <button
+              onClick={handleGenerateTestData}
+              disabled={generating}
+              className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold bg-purple-600 text-white rounded-lg hover:opacity-90 transition-all shrink-0 disabled:opacity-50"
+            >
+              <Zap size={15} />
+              {generating ? 'Generating...' : 'Generate'}
+            </button>
+          </div>
+
           {/* Export */}
           <div className="flex items-start justify-between gap-4">
             <div className="flex-1">

@@ -97,14 +97,8 @@ export function FoodsView() {
     // Sort
     if (sortBy === 'name') {
       result = [...result].sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === 'usage') {
-      result = [...result].sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
     } else if (sortBy === 'recent') {
-      result = [...result].sort((a, b) => {
-        if (!a.lastUsed) return 1;
-        if (!b.lastUsed) return -1;
-        return new Date(b.lastUsed) - new Date(a.lastUsed);
-      });
+      result = [...result].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 
     return result;
@@ -131,14 +125,8 @@ export function FoodsView() {
     // Sort
     if (sortBy === 'name') {
       result = [...result].sort((a, b) => a.name.localeCompare(b.name));
-    } else if (sortBy === 'usage') {
-      result = [...result].sort((a, b) => (b.usageCount || 0) - (a.usageCount || 0));
     } else if (sortBy === 'recent') {
-      result = [...result].sort((a, b) => {
-        if (!a.lastUsed) return 1;
-        if (!b.lastUsed) return -1;
-        return new Date(b.lastUsed) - new Date(a.lastUsed);
-      });
+      result = [...result].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
     }
 
     return result;
@@ -302,8 +290,7 @@ export function FoodsView() {
             className="px-3 py-2.5 md:py-2 text-sm border border-[var(--color-border-primary)] rounded-lg focus:border-[var(--color-accent)] focus:ring-2 focus:ring-[var(--color-accent)]/20 outline-none bg-[var(--color-bg-secondary)] text-[var(--color-text-primary)] transition-all shrink-0"
           >
             <option value="name">Name</option>
-            <option value="usage">Most used</option>
-            <option value="recent">Recent</option>
+            <option value="recent">Recently Added</option>
           </select>
         </div>
 

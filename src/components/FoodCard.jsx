@@ -4,17 +4,6 @@
 import { useState } from 'react';
 import { Pencil, Trash2, Plus, AlertCircle } from 'lucide-react';
 
-const formatLastUsed = (dateString) => {
-  if (!dateString) return 'Never used';
-  const date = new Date(dateString);
-  const diffDays = Math.floor((new Date() - date) / 86400000);
-  if (diffDays === 0) return 'Today';
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays}d ago`;
-  if (diffDays < 30) return `${Math.floor(diffDays / 7)}w ago`;
-  return date.toLocaleDateString();
-};
-
 export function FoodCard({ food, onEdit, onDelete, onQuickLog, onTagClick }) {
   const [confirmDelete, setConfirmDelete] = useState(false);
 
@@ -92,12 +81,6 @@ export function FoodCard({ food, onEdit, onDelete, onQuickLog, onTagClick }) {
           ))}
         </div>
       )}
-
-      {/* Usage stats */}
-      <div className="flex items-center justify-between pt-2 border-t border-[var(--color-border-primary)]">
-        <span className="text-xs text-[var(--color-text-secondary)]">Used {food.usageCount || 0}×</span>
-        <span className="text-xs text-[var(--color-text-secondary)]">{formatLastUsed(food.lastUsed)}</span>
-      </div>
     </div>
   );
 }
