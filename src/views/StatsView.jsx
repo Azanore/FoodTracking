@@ -31,6 +31,39 @@ const getAllDailyLogs = () => {
   return logs.sort((a, b) => b.date.localeCompare(a.date));
 };
 
+// Calculate logging streak (consecutive days)
+const calculateStreak = (logs) => {
+  if (logs.length === 0) return 0;
+
+  const sortedDates = logs.map(log => log.date).sort((a, b) => b.localeCompare(a));
+  const today = new Date().toISOString().split('T')[0];
+
+  // Check if most recent log is today or yesterday
+  const mostRecent = sortedDates[0];
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+  if (mostRecent !== today && mostRecent !== yesterdayStr) {
+    return 0; // Streak broken
+  }
+
+  let streak = 1;
+  for (let i = 1; i < sortedDates.length; i++) {
+    const current = new Date(sortedDates[i]);
+    const previous = new Date(sortedDates[i - 1]);
+    const diffDays = Math.round((previous - current) / 86400000);
+
+    if (diffDays === 1) {
+      streak++;
+    } else {
+      break;
+    }
+  }
+
+  return streak;
+};
+
 // Filter logs by date range
 const filterByDateRange = (logs, range) => {
   if (range === 'all') return logs;
@@ -71,6 +104,7 @@ const countTotalMeals = (logs) => {
 const getTopFoods = (logs, n = 10) => {
   const foodCounts = {};
   const foodDetails = {};
+  const foodLastEaten = {};
 
   logs.forEach(log => {
     log.timeline?.forEach(evt => {
@@ -80,13 +114,16 @@ const getTopFoods = (logs, n = 10) => {
           if (!foodDetails[f.id]) {
             foodDetails[f.id] = { id: f.id, name: f.name };
           }
+          if (!foodLastEaten[f.id] || log.date > foodLastEaten[f.id]) {
+            foodLastEaten[f.id] = log.date;
+          }
         });
       }
     });
   });
 
   return Object.entries(foodCounts)
-    .map(([id, count]) => ({ ...foodDetails[id], count }))
+    .map(([id, count]) => ({ ...foodDetails[id], count, lastEaten: foodLastEaten[id] }))
     .sort((a, b) => b.count - a.count)
     .slice(0, n);
 };
@@ -95,6 +132,7 @@ const getTopFoods = (logs, n = 10) => {
 const getTopDrinks = (logs, n = 10) => {
   const drinkCounts = {};
   const drinkDetails = {};
+  const drinkLastEaten = {};
 
   logs.forEach(log => {
     log.timeline?.forEach(evt => {
@@ -104,13 +142,16 @@ const getTopDrinks = (logs, n = 10) => {
           if (!drinkDetails[d.id]) {
             drinkDetails[d.id] = { id: d.id, name: d.name };
           }
+          if (!drinkLastEaten[d.id] || log.date > drinkLastEaten[d.id]) {
+            drinkLastEaten[d.id] = log.date;
+          }
         });
       }
     });
   });
 
   return Object.entries(drinkCounts)
-    .map(([id, count]) => ({ ...drinkDetails[id], count }))
+    .map(([id, count]) => ({ ...drinkDetails[id], count, lastEaten: drinkLastEaten[id] }))
     .sort((a, b) => b.count - a.count)
     .slice(0, n);
 };
@@ -212,6 +253,7 @@ export function StatsView() {
   }
 
   const filteredLogs = filterByDateRange(allLogs, dateRange);
+  const streak = calculateStreak(allLogs);
   const uniqueItems = countUniqueItems(filteredLogs);
   const totalMeals = countTotalMeals(filteredLogs);
   const topFoods = getTopFoods(filteredLogs);
@@ -219,6 +261,23 @@ export function StatsView() {
   const mealFrequency = getMealFrequency(filteredLogs);
   const feelingFrequency = getFeelingFrequency(filteredLogs);
   const tagFrequency = getTagFrequency(filteredLogs);
+
+  // Format date for display
+  const formatDate = (dateStr) => {
+    const date = new Date(dateStr);
+    const today = new Date().toISOString().split('T')[0];
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+
+    if (dateStr === today) return 'Today';
+    if (dateStr === yesterdayStr) return 'Yesterday';
+
+    const diffDays = Math.floor((new Date(today) - date) / 86400000);
+    if (diffDays < 7) return `${diffDays}d ago`;
+
+    return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
 
   return (
     <div className="flex-1 p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto w-full">
@@ -249,6 +308,9 @@ export function StatsView() {
             <span className="text-xs text-[var(--color-text-secondary)]">Days Logged</span>
           </div>
           <p className="text-2xl font-semibold text-[var(--color-text-primary)]">{filteredLogs.length}</p>
+          {streak > 0 && (
+            <p className="text-xs text-[var(--color-text-secondary)] mt-1">🔥 {streak} day streak</p>
+          )}
         </div>
 
         <div className="bg-[var(--color-bg-primary)] border border-[var(--color-border-primary)] rounded-lg p-4">
@@ -287,10 +349,13 @@ export function StatsView() {
           ) : (
             <div className="space-y-2">
               {topFoods.map((food, i) => (
-                <div key={food.id} className="flex items-center justify-between">
+                <div key={food.id} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     <span className="text-xs text-[var(--color-text-secondary)] w-5">{i + 1}.</span>
-                    <span className="text-sm text-[var(--color-text-primary)] truncate">{food.name}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-[var(--color-text-primary)] truncate">{food.name}</p>
+                      <p className="text-xs text-[var(--color-text-secondary)]">{formatDate(food.lastEaten)}</p>
+                    </div>
                   </div>
                   <span className="text-sm font-medium text-[var(--color-accent)]">{food.count}×</span>
                 </div>
@@ -307,10 +372,13 @@ export function StatsView() {
           ) : (
             <div className="space-y-2">
               {topDrinks.map((drink, i) => (
-                <div key={drink.id} className="flex items-center justify-between">
+                <div key={drink.id} className="flex items-center justify-between gap-2">
                   <div className="flex items-center gap-2 flex-1 min-w-0">
                     <span className="text-xs text-[var(--color-text-secondary)] w-5">{i + 1}.</span>
-                    <span className="text-sm text-[var(--color-text-primary)] truncate">{drink.name}</span>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm text-[var(--color-text-primary)] truncate">{drink.name}</p>
+                      <p className="text-xs text-[var(--color-text-secondary)]">{formatDate(drink.lastEaten)}</p>
+                    </div>
                   </div>
                   <span className="text-sm font-medium text-[var(--color-accent)]">{drink.count}×</span>
                 </div>

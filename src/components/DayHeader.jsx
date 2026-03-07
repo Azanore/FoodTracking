@@ -3,7 +3,8 @@
 // Should not include: Meal management, food library.
 
 import { useState, useRef, useEffect } from 'react';
-import { ChevronLeft, ChevronRight, X, Tag, Plus } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, Tag, Plus, Calendar } from 'lucide-react';
+import { DatePicker } from './DatePicker';
 
 // Format date as "Tuesday, March 3"
 const formatDate = (dateStr) => {
@@ -16,6 +17,7 @@ const formatYear = (dateStr) => new Date(dateStr + 'T00:00:00').getFullYear();
 // DayHeader – date navigation + day-level tags
 export function DayHeader({ currentDate, onDateChange, tags, onTagAdd, onTagRemove }) {
   const [showTagInput, setShowTagInput] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const tagRef = useRef(null);
   const today = new Date().toISOString().split('T')[0];
   const isToday = currentDate === today;
@@ -64,22 +66,25 @@ export function DayHeader({ currentDate, onDateChange, tags, onTagAdd, onTagRemo
         </button>
 
         {/* Date */}
-        <div className="flex flex-col md:flex-row md:items-baseline gap-0 md:gap-2 min-w-0 flex-1">
+        <button
+          onClick={() => setShowDatePicker(true)}
+          className="flex flex-col md:flex-row md:items-baseline gap-0 md:gap-2 min-w-0 flex-1 text-left hover:opacity-80 transition-opacity"
+        >
           <h1 className="text-lg md:text-xl font-semibold text-[var(--color-text-primary)] leading-tight">
             {formatDate(currentDate)}
           </h1>
           <div className="flex items-center gap-2">
             <span className="text-xs md:text-sm text-[var(--color-text-secondary)]">{formatYear(currentDate)}</span>
             {!isToday && (
-              <button
-                onClick={() => onDateChange(today)}
+              <span
+                onClick={(e) => { e.stopPropagation(); onDateChange(today); }}
                 className="text-xs text-[var(--color-accent)] hover:underline whitespace-nowrap"
               >
                 → Today
-              </button>
+              </span>
             )}
           </div>
-        </div>
+        </button>
 
         {/* Next */}
         <button
@@ -149,6 +154,14 @@ export function DayHeader({ currentDate, onDateChange, tags, onTagAdd, onTagRemo
           </button>
         </div>
       )}
+
+      {/* Date Picker Modal */}
+      <DatePicker
+        isOpen={showDatePicker}
+        onClose={() => setShowDatePicker(false)}
+        currentDate={currentDate}
+        onDateSelect={onDateChange}
+      />
     </div>
   );
 }
