@@ -80,6 +80,67 @@ export function SettingsView() {
     }
   };
 
+  // Export as CSV
+  const handleExportCSV = () => {
+    try {
+      const logs = [];
+
+      // Get all daily logs
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key.startsWith('day_')) {
+          try {
+            const log = JSON.parse(localStorage.getItem(key));
+            logs.push(log);
+          } catch (e) {
+            console.error('Failed to parse log:', key);
+          }
+        }
+      }
+
+      // Sort by date
+      logs.sort((a, b) => a.date.localeCompare(b.date));
+
+      // Detect delimiter based on locale (semicolon for regions that use comma as decimal separator)
+      const delimiter = new Intl.NumberFormat().format(1.1).includes(',') ? ';' : ',';
+
+      // Build CSV rows
+      const rows = [['Date', 'Time', 'Type', 'Meal Type', 'Foods', 'Drinks', 'Feeling', 'Severity', 'Notes']];
+
+      logs.forEach(log => {
+        log.timeline?.forEach(evt => {
+          if (evt.type === 'meal') {
+            const foods = evt.foods?.map(f => `${f.name} (${f.quantity} ${f.unit})`).join('; ') || '';
+            const drinks = evt.drinks?.map(d => `${d.name} (${d.quantity} ${d.unit})`).join('; ') || '';
+            // Skip meals with no foods AND no drinks
+            if (foods || drinks) {
+              rows.push([log.date, evt.time, 'Meal', evt.mealType, foods, drinks, '', '', '']);
+            }
+          } else if (evt.type === 'feeling') {
+            rows.push([log.date, evt.time || '', 'Feeling', '', '', '', evt.feeling || '', evt.severity || '', evt.notes || '']);
+          }
+        });
+      });
+
+      // Convert to CSV string
+      const csvContent = rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(delimiter)).join('\n');
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `food-diary-${new Date().toISOString().split('T')[0]}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      setMessage({ type: 'success', text: 'CSV exported successfully!' });
+      setTimeout(() => setMessage(null), 3000);
+    } catch (err) {
+      setMessage({ type: 'error', text: `CSV export failed: ${err.message}` });
+      setTimeout(() => setMessage(null), 5000);
+    }
+  };
+
   // Import JSON and restore to localStorage
   const handleImport = (e) => {
     const file = e.target.files?.[0];
@@ -213,16 +274,25 @@ export function SettingsView() {
             <div className="flex-1">
               <h3 className="text-sm font-medium text-[var(--color-text-primary)] mb-1">Export Data</h3>
               <p className="text-xs text-[var(--color-text-secondary)]">
-                Download all your data as a JSON file. Use this to backup your food diary.
+                Download your data as JSON (full backup) or CSV (for Excel/Sheets).
               </p>
             </div>
-            <button
-              onClick={handleExport}
-              className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold bg-[var(--color-accent)] text-white rounded-lg hover:opacity-90 transition-all shrink-0"
-            >
-              <Download size={15} />
-              Export
-            </button>
+            <div className="flex gap-2 shrink-0">
+              <button
+                onClick={handleExportCSV}
+                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold border border-[var(--color-accent)] text-[var(--color-accent)] rounded-lg hover:bg-[var(--color-accent)]/10 transition-all"
+              >
+                <Download size={15} />
+                CSV
+              </button>
+              <button
+                onClick={handleExport}
+                className="flex items-center gap-1.5 px-3 py-2 text-sm font-semibold bg-[var(--color-accent)] text-white rounded-lg hover:opacity-90 transition-all"
+              >
+                <Download size={15} />
+                JSON
+              </button>
+            </div>
           </div>
 
           {/* Import */}

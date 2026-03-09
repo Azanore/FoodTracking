@@ -10,6 +10,7 @@ import { TodayView } from './views/TodayView';
 import { FoodsView } from './views/FoodsView';
 import { StatsView } from './views/StatsView';
 import { SettingsView } from './views/SettingsView';
+import { FeelingTimelineView } from './views/FeelingTimelineView';
 import { getStorageInfo, shouldShowWarning, dismissWarning } from './utils/storageQuota';
 
 // Check if user has completed onboarding
@@ -25,6 +26,7 @@ const completeOnboarding = () => {
 function App() {
   const [activeView, setActiveView] = useState('today');
   const [selectedDate, setSelectedDate] = useState(null); // For navigating to specific date from Stats
+  const [selectedFeeling, setSelectedFeeling] = useState(null); // For feeling timeline view
   const [showOnboarding, setShowOnboarding] = useState(!hasCompletedOnboarding());
   const [showStorageWarning, setShowStorageWarning] = useState(false);
   const [storageInfo, setStorageInfo] = useState(null);
@@ -34,10 +36,22 @@ function App() {
     setShowOnboarding(false);
   };
 
-  // Navigate to specific date from Stats
-  const handleNavigateToDate = (date) => {
-    setSelectedDate(date);
-    setActiveView('today');
+  // Navigate to specific date or feeling timeline from Stats
+  const handleNavigateToDate = (target) => {
+    if (target.startsWith('feeling:')) {
+      const feeling = target.replace('feeling:', '');
+      setSelectedFeeling(feeling);
+      setActiveView('feeling-timeline');
+    } else {
+      setSelectedDate(target);
+      setActiveView('today');
+    }
+  };
+
+  // Back from feeling timeline to stats
+  const handleBackToStats = () => {
+    setSelectedFeeling(null);
+    setActiveView('stats');
   };
 
   // Check storage quota on mount
@@ -115,6 +129,16 @@ function App() {
           {activeView === 'foods' && <FoodsView />}
           {activeView === 'stats' && <StatsView onNavigateToDate={handleNavigateToDate} />}
           {activeView === 'settings' && <SettingsView />}
+          {activeView === 'feeling-timeline' && selectedFeeling && (
+            <FeelingTimelineView
+              feeling={selectedFeeling}
+              onBack={handleBackToStats}
+              onNavigateToDate={(date) => {
+                setSelectedDate(date);
+                setActiveView('today');
+              }}
+            />
+          )}
         </main>
       </div>
     </ErrorBoundary>

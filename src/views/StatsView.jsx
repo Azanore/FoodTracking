@@ -424,10 +424,14 @@ export function StatsView({ onNavigateToDate }) {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
             {feelingFrequency.map(({ feeling, count }) => (
-              <div key={feeling} className="flex items-center justify-between p-2 bg-[var(--color-bg-secondary)] rounded">
+              <button
+                key={feeling}
+                onClick={() => onNavigateToDate?.(`feeling:${feeling}`)}
+                className="flex items-center justify-between p-2 bg-[var(--color-bg-secondary)] rounded hover:bg-[var(--color-hover-bg)] transition-colors text-left"
+              >
                 <span className="text-sm text-[var(--color-text-primary)] capitalize">{feeling}</span>
                 <span className="text-sm font-medium text-[var(--color-accent)]">{count}×</span>
-              </div>
+              </button>
             ))}
           </div>
         </section>
