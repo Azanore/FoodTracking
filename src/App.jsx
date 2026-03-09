@@ -24,6 +24,7 @@ const completeOnboarding = () => {
 
 function App() {
   const [activeView, setActiveView] = useState('today');
+  const [selectedDate, setSelectedDate] = useState(null); // For navigating to specific date from Stats
   const [showOnboarding, setShowOnboarding] = useState(!hasCompletedOnboarding());
   const [showStorageWarning, setShowStorageWarning] = useState(false);
   const [storageInfo, setStorageInfo] = useState(null);
@@ -31,6 +32,12 @@ function App() {
   const handleOnboardingComplete = () => {
     completeOnboarding();
     setShowOnboarding(false);
+  };
+
+  // Navigate to specific date from Stats
+  const handleNavigateToDate = (date) => {
+    setSelectedDate(date);
+    setActiveView('today');
   };
 
   // Check storage quota on mount
@@ -104,9 +111,9 @@ function App() {
 
         {/* Main content - full height minus bottom nav on mobile */}
         <main className="flex-1 overflow-auto pb-16 md:pb-0">
-          {activeView === 'today' && <TodayView />}
+          {activeView === 'today' && <TodayView initialDate={selectedDate} onDateChange={() => setSelectedDate(null)} />}
           {activeView === 'foods' && <FoodsView />}
-          {activeView === 'stats' && <StatsView />}
+          {activeView === 'stats' && <StatsView onNavigateToDate={handleNavigateToDate} />}
           {activeView === 'settings' && <SettingsView />}
         </main>
       </div>

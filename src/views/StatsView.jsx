@@ -214,7 +214,7 @@ const getTagFrequency = (logs) => {
     .slice(0, 15);
 };
 
-export function StatsView() {
+export function StatsView({ onNavigateToDate }) {
   const [dateRange, setDateRange] = useState('30');
   const [allLogs, setAllLogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -354,7 +354,12 @@ export function StatsView() {
                     <span className="text-xs text-[var(--color-text-secondary)] w-5">{i + 1}.</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-[var(--color-text-primary)] truncate">{food.name}</p>
-                      <p className="text-xs text-[var(--color-text-secondary)]">{formatDate(food.lastEaten)}</p>
+                      <button
+                        onClick={() => onNavigateToDate?.(food.lastEaten)}
+                        className="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:underline transition-colors text-left"
+                      >
+                        {formatDate(food.lastEaten)}
+                      </button>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-[var(--color-accent)]">{food.count}×</span>
@@ -377,7 +382,12 @@ export function StatsView() {
                     <span className="text-xs text-[var(--color-text-secondary)] w-5">{i + 1}.</span>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm text-[var(--color-text-primary)] truncate">{drink.name}</p>
-                      <p className="text-xs text-[var(--color-text-secondary)]">{formatDate(drink.lastEaten)}</p>
+                      <button
+                        onClick={() => onNavigateToDate?.(drink.lastEaten)}
+                        className="text-xs text-[var(--color-text-secondary)] hover:text-[var(--color-accent)] hover:underline transition-colors text-left"
+                      >
+                        {formatDate(drink.lastEaten)}
+                      </button>
                     </div>
                   </div>
                   <span className="text-sm font-medium text-[var(--color-accent)]">{drink.count}×</span>

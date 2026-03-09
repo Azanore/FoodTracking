@@ -39,13 +39,21 @@ const buildDefaultTimeline = () =>
 
 // ── Component ────────────────────────────────────────────────────────────────
 
-export function TodayView() {
-  const [currentDate, setCurrentDate] = useState(getTodayDate());
+export function TodayView({ initialDate, onDateChange }) {
+  const [currentDate, setCurrentDate] = useState(initialDate || getTodayDate());
   const [dailyLog, setDailyLog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingMeal, setEditingMeal] = useState(null);
   const [showFeelingModal, setShowFeelingModal] = useState(false);
+
+  // Update date when initialDate changes (from Stats navigation)
+  useEffect(() => {
+    if (initialDate) {
+      setCurrentDate(initialDate);
+      onDateChange?.(); // Clear the initialDate after using it
+    }
+  }, [initialDate, onDateChange]);
 
   // ── Load ──────────────────────────────────────────────────────────────────
 
